@@ -826,16 +826,31 @@ function productImageMarkup(product, family) {
       <div class="product-figure__main">${mainImg}</div>
     </div>`;
   }
-  const side = g.slice(1).map((f) => {
-    const cap = galleryCaption(f) || t('cap_view');
-    return `<figure class="figure-card">
-        <div class="figure-card__media"><img class="is-zoomable" src="assets/images/${f}" alt="${escapeHtml(cap + ' — ' + product.name_slx)}" loading="lazy" /></div>
-      </figure>`;
-  }).join('');
-  return `<div class="product-figure">
+  // Multi-view gallery: one large main image + a strip of clickable thumbnails.
+  // Clicking a thumbnail swaps the main image (see initFigureThumbs). The thumb
+  // aspect ratio matches the product photos (≈4:3) so `cover` barely crops.
+  const thumbs = g.map((f, i) => `
+      <button type="button" class="pf-thumb${i === 0 ? ' is-active' : ''}" data-full="assets/images/${f}" aria-label="${escapeHtml(product.name_slx)} — ${i + 1}/${g.length}">
+        <img src="assets/images/${f}" alt="" loading="lazy" />
+      </button>`).join('');
+  return `<div class="product-figure product-figure--stack">
     <div class="product-figure__main">${mainImg}</div>
-    <div class="product-figure__side">${side}</div>
+    <div class="product-figure__thumbs">${thumbs}</div>
   </div>`;
+}
+
+// Wire the gallery thumbnail strip: clicking a thumb swaps the main product
+// image and moves the active highlight. The main keeps its is-zoomable behavior.
+function initFigureThumbs() {
+  const fig = document.querySelector('.product-figure--stack');
+  if (!fig) return;
+  const main = fig.querySelector('.product-figure__img');
+  const thumbs = Array.from(fig.querySelectorAll('.pf-thumb'));
+  thumbs.forEach((btn) => btn.addEventListener('click', () => {
+    const full = btn.dataset.full;
+    if (full && main) main.src = full;
+    thumbs.forEach((b) => b.classList.toggle('is-active', b === btn));
+  }));
 }
 
 // ===== PRODUCT page =====
@@ -1450,6 +1465,7 @@ async function initProduct() {
   initBackToTop();
   initCompare();
   initGallery();
+  initFigureThumbs();
   initImageLightbox();
   renderPage = () => {
     applyStaticI18n();
