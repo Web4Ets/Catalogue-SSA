@@ -48,11 +48,14 @@ familles, lignes vides). **`ref usine` est une clé interne — jamais rendue.**
 - `assets/images/P2/<code>.png` = photo principale (ex. `42 00 00.png` → Solar Street).
 - `assets/images/<code dossier>/` = galerie multi-vues du même produit
   (ex. `50 04 00/` = les 5 montages de l'Azur).
-- `build_data.py` copie tout en `assets/images/<slug>.png`, `<slug>-2.png`… —
-  le site ne sert **que** les copies normalisées (pas d'espaces dans les URLs).
+- `build_data.py` **convertit** tout en **WebP** `assets/images/<slug>.webp`,
+  `<slug>-2.webp`… (downscale 1280px, q82, `save_webp()`) — le site ne sert **que**
+  ces copies normalisées (pas d'espaces dans les URLs). Les PNG originaux (P2/ +
+  dossiers galerie) restent en sources pour rebuild (git-suivis, `.vercelignore`d).
 - UFO/UFI (64 xx) partagent des codes → distingués par `ref_filter` (UFS01/UFP23).
 - **Hard rule : les refs usine (SSP01, ASL23, AGL12…) n'apparaissent nulle part.**
-- Solar Street Pro (42 01 04) n'a pas de photo dédiée → placeholder front-end.
+- Produits sans photo dédiée (Solar Street Pro 42 01 04, UFO, UFI) → placeholder
+  front-end stylé affichant le code SSA (`code_prefix` = 1er code du produit).
 
 ## 5. `products.json` schema
 Generated only. Top-level keys: `site`, `families`, `suppliers` (kept empty),

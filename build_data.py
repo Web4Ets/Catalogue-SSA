@@ -19,22 +19,42 @@ Images :
 
 Run:  python -X utf8 build_data.py
 """
-import json, re, shutil
+import json, re
 from pathlib import Path
 
 import openpyxl
+from PIL import Image
 
 ROOT = Path(__file__).parent
 SOURCE = ROOT / "sources" / "data ssa.xlsx"
 IMAGES = ROOT / "assets" / "images"
 OUT = ROOT / "data" / "products.json"
 
+# Images servies : converties en WebP (allègement ~90% vs PNG d'origine).
+# Les originaux PNG (P2/ + dossiers galerie) restent en sources pour rebuild.
+WEBP_MAX = 1280      # plus grand côté en px (downscale si plus grand)
+WEBP_QUALITY = 82
+
+
+def save_webp(src, dst):
+    """Ouvre src (PNG), downscale à WEBP_MAX, enregistre en WebP optimisé."""
+    im = Image.open(src)
+    if im.mode in ("P", "LA"):
+        im = im.convert("RGBA")
+    if max(im.size) > WEBP_MAX:
+        scale = WEBP_MAX / max(im.size)
+        im = im.resize((round(im.width * scale), round(im.height * scale)), Image.LANCZOS)
+    if im.mode == "RGBA":
+        im.save(dst, "WEBP", quality=WEBP_QUALITY, method=6)
+    else:
+        im.convert("RGB").save(dst, "WEBP", quality=WEBP_QUALITY, method=6)
+
 # ── 1. Familles ────────────────────────────────────────────────────────────
 FAMILIES = [
     {
         "id": "solaire",
         "name_fr": "Éclairage Solaire", "name_en": "Solar Lighting",
-        "image": "solar-street.png",
+        "image": "solar-street.webp",
         "table_schema": "ssa",
         "tagline_fr": "Lampadaires solaires autonomes, tout-en-un et hybrides.",
         "tagline_en": "Autonomous all-in-one and hybrid solar street lights.",
@@ -44,7 +64,7 @@ FAMILIES = [
     {
         "id": "eclairage-public",
         "name_fr": "Éclairage Public & Résidentiel", "name_en": "Street & Area Lighting",
-        "image": "azur.png",
+        "image": "azur.webp",
         "table_schema": "ssa",
         "tagline_fr": "Luminaires routiers et résidentiels raccordés réseau, jusqu'à 200 lm/W.",
         "tagline_en": "Mains-powered road and residential luminaires, up to 200 lm/W.",
@@ -54,7 +74,7 @@ FAMILIES = [
     {
         "id": "industriel",
         "name_fr": "Éclairage Industriel & Sportif", "name_en": "Industrial & Sports Lighting",
-        "image": "arena.png",
+        "image": "arena.webp",
         "table_schema": "ssa",
         "tagline_fr": "Projecteurs et suspensions industrielles, du local technique au grand stade.",
         "tagline_en": "Floodlights and high-bay luminaires, from workshops to stadiums.",
@@ -64,7 +84,7 @@ FAMILIES = [
     {
         "id": "accessoires",
         "name_fr": "Accessoires Solaires", "name_en": "Solar Accessories",
-        "image": "tub.png",
+        "image": "tub.webp",
         "table_schema": "ssa",
         "tagline_fr": "Panneaux solaires tubulaires et accessoires d'installation.",
         "tagline_en": "Tubular solar panels and installation accessories.",
@@ -742,26 +762,26 @@ def load_rows():
 
 
 def normalize_images(meta, slug):
-    """Copie P2/<code>.png → <slug>.png et la galerie → <slug>-N.png.
+    """Convertit P2/<code>.png → <slug>.webp et la galerie → <slug>-N.webp.
     Retourne (image, gallery[])."""
     if not meta.get("p2"):
-        return f"{slug}.png", []      # pas de photo dédiée → placeholder front
+        return f"{slug}.webp", []      # pas de photo dédiée → placeholder front
     main_src = IMAGES / "P2" / meta["p2"]
-    main_dst = IMAGES / f"{slug}.png"
+    main_dst = IMAGES / f"{slug}.webp"
     if main_src.exists():
-        shutil.copyfile(main_src, main_dst)
-    gallery = [f"{slug}.png"]
+        save_webp(main_src, main_dst)
+    gallery = [f"{slug}.webp"]
     n = 2
     for d in meta.get("gallery_dirs", []):
         folder = IMAGES / d
         if not folder.exists():
             continue
         for f in sorted(folder.glob("*.png"), key=lambda p: (len(p.stem), p.stem)):
-            dst = IMAGES / f"{slug}-{n}.png"
-            shutil.copyfile(f, dst)
+            dst = IMAGES / f"{slug}-{n}.webp"
+            save_webp(f, dst)
             gallery.append(dst.name)
             n += 1
-    return f"{slug}.png", (gallery if len(gallery) > 1 else [])
+    return f"{slug}.webp", (gallery if len(gallery) > 1 else [])
 
 
 def build():
@@ -821,6 +841,9 @@ def build():
             "family_id": meta["family"],
             "name_slx": meta["name"],
             "image": image,
+            # Code SSA du 1er variant : sert au placeholder stylé quand la
+            # photo manque (produits sans image dédiée) — jamais une ref usine.
+            "code_prefix": variants[0]["code_slx"],
             "description_fr": meta["description_fr"],
             "description_en": meta["description_en"],
             "features_fr": meta["features_fr"],

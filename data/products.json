@@ -18,7 +18,7 @@
       "id": "solaire",
       "name_fr": "Éclairage Solaire",
       "name_en": "Solar Lighting",
-      "image": "solar-street.png",
+      "image": "solar-street.webp",
       "table_schema": "ssa",
       "tagline_fr": "Lampadaires solaires autonomes, tout-en-un et hybrides.",
       "tagline_en": "Autonomous all-in-one and hybrid solar street lights.",
@@ -39,7 +39,7 @@
       "id": "eclairage-public",
       "name_fr": "Éclairage Public & Résidentiel",
       "name_en": "Street & Area Lighting",
-      "image": "azur.png",
+      "image": "azur.webp",
       "table_schema": "ssa",
       "tagline_fr": "Luminaires routiers et résidentiels raccordés réseau, jusqu'à 200 lm/W.",
       "tagline_en": "Mains-powered road and residential luminaires, up to 200 lm/W.",
@@ -60,7 +60,7 @@
       "id": "industriel",
       "name_fr": "Éclairage Industriel & Sportif",
       "name_en": "Industrial & Sports Lighting",
-      "image": "arena.png",
+      "image": "arena.webp",
       "table_schema": "ssa",
       "tagline_fr": "Projecteurs et suspensions industrielles, du local technique au grand stade.",
       "tagline_en": "Floodlights and high-bay luminaires, from workshops to stadiums.",
@@ -81,7 +81,7 @@
       "id": "accessoires",
       "name_fr": "Accessoires Solaires",
       "name_en": "Solar Accessories",
-      "image": "tub.png",
+      "image": "tub.webp",
       "table_schema": "ssa",
       "tagline_fr": "Panneaux solaires tubulaires et accessoires d'installation.",
       "tagline_en": "Tubular solar panels and installation accessories.",
@@ -105,7 +105,8 @@
       "id": "solar-street",
       "family_id": "solaire",
       "name_slx": "Solar Street",
-      "image": "solar-street.png",
+      "image": "solar-street.webp",
+      "code_prefix": "42 00 02",
       "description_fr": "Lampadaire solaire tout-en-un : panneau, batterie LiFePO4 et luminaire LED intégrés dans un seul bloc compact. Installation sans tranchée ni raccordement réseau — idéal voiries résidentielles, parkings et chemins. Option détecteur radar disponible (réf. 42 00 99).",
       "description_en": "All-in-one solar street light: panel, LiFePO4 battery and LED luminaire integrated in a single compact unit. No trenching or grid connection required — ideal for residential roads, car parks and pathways. Radar motion-sensor option available (ref. 42 00 99).",
       "features_fr": [
@@ -199,17 +200,18 @@
         }
       ],
       "gallery": [
-        "solar-street.png",
-        "solar-street-2.png",
-        "solar-street-3.png",
-        "solar-street-4.png"
+        "solar-street.webp",
+        "solar-street-2.webp",
+        "solar-street-3.webp",
+        "solar-street-4.webp"
       ]
     },
     {
       "id": "solar-street-pro",
       "family_id": "solaire",
       "name_slx": "Solar Street Pro",
-      "image": "solar-street-pro.png",
+      "image": "solar-street-pro.webp",
+      "code_prefix": "42 01 04",
       "description_fr": "Version renforcée du lampadaire solaire tout-en-un avec batterie surdimensionnée 35 Ah offrant deux jours d'autonomie sans soleil. Pour sites exigeant une continuité de service maximale.",
       "description_en": "Heavy-duty version of the all-in-one solar street light with an oversized 35 Ah battery delivering two full days of autonomy without sun. For sites demanding maximum service continuity.",
       "features_fr": [
@@ -271,7 +273,8 @@
       "id": "resilight",
       "family_id": "solaire",
       "name_slx": "ResiLight",
-      "image": "resilight.png",
+      "image": "resilight.webp",
+      "code_prefix": "42 02 10",
       "description_fr": "Borne solaire résidentielle compacte pour jardins, allées et résidences. Panneau 25 W et batterie LiFePO4 intégrés, lumière chaude à froide réglable.",
       "description_en": "Compact residential solar garden light for gardens, driveways and estates. Integrated 25 W panel and LiFePO4 battery, adjustable warm-to-cool light.",
       "features_fr": [
@@ -392,16 +395,17 @@
         }
       ],
       "gallery": [
-        "resilight.png",
-        "resilight-2.png",
-        "resilight-3.png"
+        "resilight.webp",
+        "resilight-2.webp",
+        "resilight-3.webp"
       ]
     },
     {
       "id": "all-in-two-solar",
       "family_id": "solaire",
       "name_slx": "All In Two Solar",
-      "image": "all-in-two-solar.png",
+      "image": "all-in-two-solar.webp",
+      "code_prefix": "42 03 06",
       "description_fr": "Lampadaire solaire « all-in-two » : panneau séparé orientable pour une captation optimale, luminaire LED haute puissance jusqu'à 16 000 lm. Deux jours d'autonomie pour l'éclairage routier sans réseau.",
       "description_en": "All-in-two solar street light: separate adjustable panel for optimal harvesting, high-output LED luminaire up to 16,000 lm. Two days of autonomy for off-grid road lighting.",
       "features_fr": [
@@ -492,18 +496,19 @@
         }
       ],
       "gallery": [
-        "all-in-two-solar.png",
-        "all-in-two-solar-2.png",
-        "all-in-two-solar-3.png",
-        "all-in-two-solar-4.png",
-        "all-in-two-solar-5.png"
+        "all-in-two-solar.webp",
+        "all-in-two-solar-2.webp",
+        "all-in-two-solar-3.webp",
+        "all-in-two-solar-4.webp",
+        "all-in-two-solar-5.webp"
       ]
     },
     {
       "id": "solar-road",
       "family_id": "solaire",
       "name_slx": "Solar Road",
-      "image": "solar-road.png",
+      "image": "solar-road.webp",
+      "code_prefix": "42 04 03",
       "description_fr": "Lampadaire solaire hybride « all-in-two » 100 % : fonctionne sur batterie solaire avec basculement réseau, pour un éclairage routier garanti toute l'année. Panneau et batterie dimensionnés par puissance.",
       "description_en": "100% hybrid all-in-two solar street light: runs on solar battery with grid fallback for guaranteed road lighting all year round. Panel and battery sized per wattage.",
       "features_fr": [
@@ -587,7 +592,8 @@
       "id": "solar-road-pro",
       "family_id": "solaire",
       "name_slx": "Solar Road Pro",
-      "image": "solar-road-pro.png",
+      "image": "solar-road-pro.webp",
+      "code_prefix": "42 05 03",
       "description_fr": "La version premium du lampadaire hybride all-in-two : optique routière optimisée et électronique renforcée, du 30 W au 80 W. Pour axes principaux et zones à fort trafic.",
       "description_en": "The premium version of the hybrid all-in-two street light: optimised road optics and reinforced electronics, from 30 W to 80 W. For main roads and high-traffic areas.",
       "features_fr": [
@@ -671,7 +677,8 @@
       "id": "azur",
       "family_id": "eclairage-public",
       "name_slx": "Azur",
-      "image": "azur.png",
+      "image": "azur.webp",
+      "code_prefix": "50 00 50",
       "description_fr": "Luminaire résidentiel Azur 160 lm/W, décliné en cinq montages : lanterne, crosse (cross), potence, lanterne D et suspension. Deux puissances (40 W et 100 W) pour places, lotissements et centres-villes. Transformateur d'alimentation dédié disponible.",
       "description_en": "Azur residential luminaire, 160 lm/W, available in five mountings: lantern, cross, bracket, lantern D and pendant. Two wattages (40 W and 100 W) for squares, residential areas and town centres. Dedicated power supply unit available.",
       "features_fr": [
@@ -890,19 +897,20 @@
         }
       ],
       "gallery": [
-        "azur.png",
-        "azur-2.png",
-        "azur-3.png",
-        "azur-4.png",
-        "azur-5.png",
-        "azur-6.png"
+        "azur.webp",
+        "azur-2.webp",
+        "azur-3.webp",
+        "azur-4.webp",
+        "azur-5.webp",
+        "azur-6.webp"
       ]
     },
     {
       "id": "mistral",
       "family_id": "eclairage-public",
       "name_slx": "Mistral",
-      "image": "mistral.png",
+      "image": "mistral.webp",
+      "code_prefix": "50 05 50",
       "description_fr": "Lanterne résidentielle Mistral 160 lm/W au design contemporain, 50 W à 80 W. Driver intégré déposable, photocellule et NEMA en option — pensée pour les espaces urbains et parcs.",
       "description_en": "Mistral residential lantern, 160 lm/W, contemporary design, 50 W to 80 W. Detachable built-in driver, optional photocell and NEMA socket — designed for urban spaces and parks.",
       "features_fr": [
@@ -1027,7 +1035,8 @@
       "id": "street-core",
       "family_id": "eclairage-public",
       "name_slx": "Street Core",
-      "image": "street-core.png",
+      "image": "street-core.webp",
+      "code_prefix": "51 00 50",
       "description_fr": "Luminaire routier d'entrée de gamme à 150 lm/W, de 50 W à 200 W. Le bon rapport performance/prix pour la rénovation des voiries communales.",
       "description_en": "Entry-level road luminaire at 150 lm/W, from 50 W to 200 W. The right performance/price ratio for municipal road retrofits.",
       "features_fr": [
@@ -1174,7 +1183,8 @@
       "id": "street-plus",
       "family_id": "eclairage-public",
       "name_slx": "Street Plus",
-      "image": "street-plus.png",
+      "image": "street-plus.webp",
+      "code_prefix": "52 00 50",
       "description_fr": "Luminaire routier 170 lm/W de milieu de gamme, 50 W à 200 W. Efficacité accrue et optique routière soignée pour les axes structurants.",
       "description_en": "Mid-range road luminaire at 170 lm/W, 50 W to 200 W. Higher efficacy and refined road optics for main thoroughfares.",
       "features_fr": [
@@ -1313,22 +1323,23 @@
         }
       ],
       "gallery": [
-        "street-plus.png",
-        "street-plus-2.png",
-        "street-plus-3.png",
-        "street-plus-4.png",
-        "street-plus-5.png",
-        "street-plus-6.png",
-        "street-plus-7.png",
-        "street-plus-8.png",
-        "street-plus-9.png"
+        "street-plus.webp",
+        "street-plus-2.webp",
+        "street-plus-3.webp",
+        "street-plus-4.webp",
+        "street-plus-5.webp",
+        "street-plus-6.webp",
+        "street-plus-7.webp",
+        "street-plus-8.webp",
+        "street-plus-9.webp"
       ]
     },
     {
       "id": "street-pro",
       "family_id": "eclairage-public",
       "name_slx": "Street Pro",
-      "image": "street-pro.png",
+      "image": "street-pro.webp",
+      "code_prefix": "53 00 50",
       "description_fr": "Le haut de gamme routier SSA : 200 lm/W, de 50 W à 200 W (jusqu'à 40 000 lm). Consommation minimale pour les grands axes et l'éclairage public intensif.",
       "description_en": "SSA's flagship road luminaire: 200 lm/W, from 50 W to 200 W (up to 40,000 lm). Minimal consumption for major roads and intensive public lighting.",
       "features_fr": [
@@ -1471,22 +1482,23 @@
         }
       ],
       "gallery": [
-        "street-pro.png",
-        "street-pro-2.png",
-        "street-pro-3.png",
-        "street-pro-4.png",
-        "street-pro-5.png",
-        "street-pro-6.png",
-        "street-pro-7.png",
-        "street-pro-8.png",
-        "street-pro-9.png"
+        "street-pro.webp",
+        "street-pro-2.webp",
+        "street-pro-3.webp",
+        "street-pro-4.webp",
+        "street-pro-5.webp",
+        "street-pro-6.webp",
+        "street-pro-7.webp",
+        "street-pro-8.webp",
+        "street-pro-9.webp"
       ]
     },
     {
       "id": "rock",
       "family_id": "industriel",
       "name_slx": "Rock",
-      "image": "rock.png",
+      "image": "rock.webp",
+      "code_prefix": "60 00 50",
       "description_fr": "Projecteur industriel Rock 170 lm/W, IP65 et IK08, de 50 W à 400 W. Polyvalent : façades, cours, zones de stockage et terrains de sport de proximité.",
       "description_en": "Rock industrial floodlight, 170 lm/W, IP65 and IK08, from 50 W to 400 W. Versatile: facades, yards, storage areas and local sports grounds.",
       "features_fr": [
@@ -1650,7 +1662,8 @@
       "id": "arena",
       "family_id": "industriel",
       "name_slx": "Aréna",
-      "image": "arena.png",
+      "image": "arena.webp",
+      "code_prefix": "61 00 50",
       "description_fr": "Projecteur de stade Aréna 160 lm/W, IP66 et IK08, modules orientables de 500 W à 1500 W (jusqu'à 240 000 lm). Conçu pour les grandes hauteurs de feu et les enceintes sportives.",
       "description_en": "Aréna stadium floodlight, 160 lm/W, IP66 and IK08, adjustable modules from 500 W to 1500 W (up to 240,000 lm). Designed for high masts and sports venues.",
       "features_fr": [
@@ -1774,21 +1787,22 @@
         }
       ],
       "gallery": [
-        "arena.png",
-        "arena-2.png",
-        "arena-3.png",
-        "arena-4.png",
-        "arena-5.png",
-        "arena-6.png",
-        "arena-7.png",
-        "arena-8.png"
+        "arena.webp",
+        "arena-2.webp",
+        "arena-3.webp",
+        "arena-4.webp",
+        "arena-5.webp",
+        "arena-6.webp",
+        "arena-7.webp",
+        "arena-8.webp"
       ]
     },
     {
       "id": "ride-stadium",
       "family_id": "industriel",
       "name_slx": "Ride / Stadium",
-      "image": "ride-stadium.png",
+      "image": "ride-stadium.webp",
+      "code_prefix": "62 00 25",
       "description_fr": "Projecteur de stade haute performance 180 lm/W, IP66 et IK08, de 250 W à 2500 W (jusqu'à 450 000 lm). La référence pour stades, grands halls et éclairage événementiel.",
       "description_en": "High-performance stadium floodlight, 180 lm/W, IP66 and IK08, from 250 W to 2500 W (up to 450,000 lm). The reference for stadiums, large halls and event lighting.",
       "features_fr": [
@@ -1964,7 +1978,8 @@
       "id": "poursuit-focus",
       "family_id": "industriel",
       "name_slx": "Poursuit / Focus",
-      "image": "poursuit-focus.png",
+      "image": "poursuit-focus.webp",
+      "code_prefix": "63 00 50",
       "description_fr": "Projecteur de poursuite longue portée 160 lm/W, IP66 et IK08, de 400 W à 1800 W. Faisceau concentré pour la mise en valeur, les ports et les très grandes hauteurs.",
       "description_en": "Long-throw tracking floodlight, 160 lm/W, IP66 and IK08, from 400 W to 1800 W. Concentrated beam for floodlighting, ports and very high masts.",
       "features_fr": [
@@ -2100,17 +2115,18 @@
         }
       ],
       "gallery": [
-        "poursuit-focus.png",
-        "poursuit-focus-2.png",
-        "poursuit-focus-3.png",
-        "poursuit-focus-4.png"
+        "poursuit-focus.webp",
+        "poursuit-focus-2.webp",
+        "poursuit-focus-3.webp",
+        "poursuit-focus-4.webp"
       ]
     },
     {
       "id": "ufo",
       "family_id": "industriel",
       "name_slx": "UFO",
-      "image": "ufo.png",
+      "image": "ufo.webp",
+      "code_prefix": "64 00 10",
       "description_fr": "Suspension industrielle UFO 180 lm/W, IP65 et IK08, de 100 W à 200 W. Pour halls, entrepôts et ateliers à grande hauteur sous plafond.",
       "description_en": "UFO industrial high-bay, 180 lm/W, IP65 and IK08, from 100 W to 200 W. For halls, warehouses and workshops with high ceilings.",
       "features_fr": [
@@ -2197,7 +2213,8 @@
       "id": "ufi",
       "family_id": "industriel",
       "name_slx": "UFI",
-      "image": "ufi.png",
+      "image": "ufi.webp",
+      "code_prefix": "64 01 10",
       "description_fr": "Suspension industrielle UFI 180 lm/W, IP65 et IK08, de 100 W à 300 W. La version haute puissance pour les très grands volumes industriels.",
       "description_en": "UFI industrial high-bay, 180 lm/W, IP65 and IK08, from 100 W to 300 W. The high-power version for very large industrial volumes.",
       "features_fr": [
@@ -2296,7 +2313,8 @@
       "id": "tub",
       "family_id": "accessoires",
       "name_slx": "TUB",
-      "image": "tub.png",
+      "image": "tub.webp",
+      "code_prefix": "10 00 20",
       "description_fr": "Panneau solaire tubulaire TUB : design cylindrique anti-vandalisme et anti-accumulation (sable, neige), montage direct sur mât. Disponible en 200 W et 265 W.",
       "description_en": "TUB tubular solar panel: cylindrical anti-vandal, self-cleaning design (sand, snow), direct pole mounting. Available in 200 W and 265 W.",
       "features_fr": [
