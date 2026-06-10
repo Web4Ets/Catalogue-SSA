@@ -972,7 +972,7 @@ function renderProduct() {
             📊 ${escapeHtml(t('export_csv'))}
           </button>
           <button type="button" class="btn-download alt" id="compare-product-btn"></button>
-          <button type="button" class="btn-download alt" id="print-btn">🖨 ${escapeHtml(t('print'))}</button>
+          <a class="btn-download alt" id="print-btn" href="assets/catalogue/Catalogue-SSA-2026.pdf" target="_blank" rel="noopener">🖨 ${escapeHtml(t('print_catalogue'))}</a>
         </div>
       </div>
       ${techHtml}
@@ -1002,8 +1002,8 @@ function renderProduct() {
     refreshCmp();
     cmpBtn.addEventListener('click', () => { toggleCompare(product.id); refreshCmp(); });
   }
-  // Print this datasheet
-  document.getElementById('print-btn')?.addEventListener('click', () => window.print());
+  // (Le bouton « Imprimer le catalogue » est un lien <a> vers le PDF du
+  // catalogue complet — ouvert dans un nouvel onglet, où l'utilisateur imprime.)
   // Keyboard arrows ←/→ jump to the prev/next product in the family.
   const navPrev = container.querySelector('.product-nav__btn[data-nav="prev"]');
   const navNext = container.querySelector('.product-nav__btn[data-nav="next"]');
