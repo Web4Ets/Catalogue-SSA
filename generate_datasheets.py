@@ -45,18 +45,41 @@ PDF_IMG_MAX = 400
 _PDF_IMG_CACHE = ROOT / "assets" / "_pdf_img_cache"
 _PDF_IMG_CACHE.mkdir(exist_ok=True)
 
-def _pdf_optimized_image_path(src_path, max_px=PDF_IMG_MAX):
+def _whiten_bg(im):
+    """Détoure le fond studio gris des photos produit vers du blanc pur, pour
+    qu'elles flottent sur la page blanche de la fiche (sans cadre ni panneau).
+    Lift par luminance, limité aux pixels neutres → le produit (sombre/coloré)
+    reste intact, y compris sur les fonds en dégradé. No-op si numpy absent."""
+    try:
+        import numpy as np
+    except ImportError:
+        return im.convert("RGB")
+    im = im.convert("RGB")
+    a = np.asarray(im).astype(np.float32)
+    lum = 0.299 * a[:, :, 0] + 0.587 * a[:, :, 1] + 0.114 * a[:, :, 2]
+    neutral = (a.max(2) - a.min(2)) <= 30           # fond ≈ gris neutre
+    # blanc plein dès lum 200 ; feather 185→200 pour adoucir les bords du produit
+    f = np.clip((lum - 185.0) / (200.0 - 185.0), 0, 1) * neutral
+    f = f[:, :, None]
+    out = a * (1 - f) + 255 * f
+    from PIL import Image as _PILImage
+    return _PILImage.fromarray(out.astype("uint8"))
+
+
+def _pdf_optimized_image_path(src_path, max_px=PDF_IMG_MAX, whiten=False):
     """Return a downsized (max_px) cached copy suitable for PDF embedding.
     Text-containing images (spec grid, dimension diagrams) use a higher max_px so
-    they stay crisp at full width; product photos stay light. The cache is keyed by
-    (max_px, name) and invalidated when the source mtime is newer."""
+    they stay crisp at full width; product photos stay light. With whiten=True the
+    grey studio background is lifted to white. The cache is keyed by
+    (max_px, whiten, name) and invalidated when the source mtime is newer."""
     try:
         from PIL import Image as _PILImage
     except ImportError:
         return src_path
     if not src_path.exists():
         return src_path
-    cache_path = _PDF_IMG_CACHE / f"{max_px}_{src_path.name}"
+    tag = f"{max_px}_{'w_' if whiten else ''}{src_path.name}"
+    cache_path = _PDF_IMG_CACHE / tag
     if cache_path.exists() and cache_path.stat().st_mtime > src_path.stat().st_mtime:
         return cache_path
     try:
@@ -65,6 +88,8 @@ def _pdf_optimized_image_path(src_path, max_px=PDF_IMG_MAX):
         if max(w, h) > max_px:
             scale = max_px / max(w, h)
             im = im.resize((int(w*scale), int(h*scale)), _PILImage.LANCZOS)
+        if whiten:
+            im = _whiten_bg(im)
         if im.mode == 'RGBA':
             im.save(cache_path, 'PNG', optimize=True)
         else:
@@ -390,11 +415,11 @@ def build_product_pdf(product, lang):
     # ── Top section ──
     # LEFT column = image stack (main product photo + dimensions + use-case),
     # RIGHT column = product info (name, family, description, features).
-    def _img(fn, w_mm, h_mm, max_px=PDF_IMG_MAX):
+    def _img(fn, w_mm, h_mm, max_px=PDF_IMG_MAX, whiten=False):
         ip = IMG_DIR / fn
         if not ip.exists():
             return None
-        return Image(str(_pdf_optimized_image_path(ip, max_px)),
+        return Image(str(_pdf_optimized_image_path(ip, max_px, whiten=whiten)),
                      width=w_mm * mm, height=h_mm * mm, kind="proportional")
 
     # ── Title block: kicker + product name + accent bar ──
@@ -409,13 +434,14 @@ def build_product_pdf(product, lang):
     # ── Visual row: product image (left) | dimensions + use-case (right) ──
     gallery = product.get("gallery") or [product["image"]]
     extras = [fn for fn in gallery[1:] if (IMG_DIR / fn).exists()][:2]
-    main_im = _img(product["image"], 92, 66)
+    main_im = _img(product["image"], 92, 66, whiten=True)
+    # Plus de cadre ni de panneau de fond : les photos (fond détouré en blanc)
+    # flottent directement sur la page blanche.
     panel = TableStyle([
-        ("BACKGROUND", (0, 0), (-1, -1), BG),
+        ("BACKGROUND", (0, 0), (-1, -1), colors.white),
         ("ALIGN", (0, 0), (-1, -1), "CENTER"), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
     ])
     card_style = TableStyle([
-        ("BOX", (0, 0), (-1, -1), 0.7, BORDER),
         ("BACKGROUND", (0, 0), (-1, -1), colors.white),
         ("ALIGN", (0, 0), (-1, -1), "CENTER"), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
         ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
@@ -424,8 +450,10 @@ def build_product_pdf(product, lang):
         right_flow = []
         for fn in extras:
             lblkey = "cap_dim" if "-dim" in fn else ("cap_use" if "-use" in fn else None)
-            # dimension diagrams contain text labels → render at higher res
-            ci = _img(fn, 70, 28, max_px=900 if "-dim" in fn else PDF_IMG_MAX)
+            is_diagram = ("-dim" in fn or "-use" in fn)
+            # dimension diagrams contain text labels → render at higher res, pas de détourage
+            ci = _img(fn, 70, 28, max_px=900 if "-dim" in fn else PDF_IMG_MAX,
+                      whiten=not is_diagram)
             if not ci:
                 continue
             boxed = Table([[ci]], colWidths=[76 * mm], rowHeights=[28 * mm])
