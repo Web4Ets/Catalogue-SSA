@@ -1205,7 +1205,8 @@ img { max-width: 100%; display: block; }
   background: linear-gradient(180deg, #faf8f3 0%, #efe9dd 100%);
   border: 1px solid var(--color-border);
   border-radius: var(--radius); padding: 30px;
-  display: grid; place-items: center; height: 480px;
+  display: flex; align-items: center; justify-content: center;
+  height: 480px; overflow: hidden;
   box-shadow: 0 12px 32px rgba(247,166,0,0.10);
 }
 .product-figure--solo .product-figure__main { height: 440px; }
