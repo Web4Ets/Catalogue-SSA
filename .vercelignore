@@ -1,0 +1,42 @@
+# Build scripts & data sources — never deploy these
+build_data.py
+generate_datasheets.py
+*.py
+*.pyc
+__pycache__/
+
+# Excel / CSV source data
+sources/
+*.xlsx
+*.csv
+
+# Backups & temp artifacts
+*.bak
+*.bak*
+*.tmp
+*.new
+_backup_classic/
+_pdf_img_cache/
+assets/_pdf_img_cache/
+
+# Source logo & internal docs
+LOGO.pdf
+CLAUDE.md
+
+# Editor / tooling
+.claude/
+.git/
+.DS_Store
+
+# Old Netlify config (Vercel uses vercel.json)
+netlify.toml
+
+_hires_originals/
+_precrop_originals/
+
+# Original image folders (the site serves the normalized <slug>.png copies)
+assets/images/P2/
+assets/images/1* 0*/
+assets/images/4* 0*/
+assets/images/5* 0*/
+assets/images/6* 0*/

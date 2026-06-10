@@ -1,0 +1,36 @@
+# ── Python tooling artifacts ──
+__pycache__/
+*.pyc
+*.pyo
+
+# ── Regenerable caches (rebuilt by generate_datasheets.py) ──
+assets/_pdf_img_cache/
+_pdf_img_cache/
+
+# ── Local-only heavy originals (not needed for the deployed site) ──
+_hires_originals/
+_precrop_originals/
+_backup_classic/
+
+# ── Temp / backup files ──
+*.bak
+*.bak*
+*.tmp
+*.new
+
+# ── Deploy ZIP artifact ──
+*.zip
+
+# ── Vercel local link state ──
+.vercel/
+
+# ── Source data (sensitive — codes usine) ──
+sources/
+
+# ── Claude Code local session / IDE state ──
+.claude/
+
+# ── OS / editor junk ──
+.DS_Store
+Thumbs.db
+.vscode/

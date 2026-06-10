@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SSA Catalogue — Luminaires Professionnels</title>
+  <link rel="icon" type="image/png" href="assets/brand/ssa-logo-sm.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=22" />
+</head>
+<body class="page-home">
+  <header class="site-header site-header--transparent" id="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="SSA Catalogue">
+        <img src="assets/brand/ssa-logo-sm.png" alt="SSA" class="logo-img logo-img--light" />
+        <img src="assets/brand/ssa-logo-white-sm.png" alt="SSA" class="logo-img logo-img--dark" />
+      </a>
+      <nav class="nav">
+        <a href="index.html" class="active" data-i18n="home">Accueil</a>
+        <a href="catalogue.html" data-i18n="catalogue">Catalogue</a>
+      </nav>
+      <div class="lang-switch lang-switch--dark" role="tablist" aria-label="Language">
+        <button data-lang="fr" type="button">FR</button>
+        <button data-lang="en" type="button">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dark cinematic hero -->
+  <section class="hero-dark">
+    <div class="hero-dark__bg"></div>
+    <div class="hero-dark__inner">
+      <span class="hero-dark__kicker" data-i18n="hero_kicker">Édition 2026</span>
+      <h1 class="hero-dark__title" data-i18n="hero_title">L'éclairage LED qui transforme vos espaces professionnels</h1>
+      <p class="hero-dark__subtitle" data-i18n="hero_subtitle">Suspensions industrielles, réglettes, projecteurs : 25 produits, 115 références.</p>
+      <form class="hero-search" id="hero-search" role="search" autocomplete="off">
+        <span class="hero-search__icon" aria-hidden="true">🔍</span>
+        <input type="search" id="hero-search-input" class="hero-search__input"
+               data-i18n-placeholder="search_placeholder"
+               placeholder="Rechercher un produit, un code SSA ou une désignation..."
+               aria-label="Rechercher" />
+        <button type="submit" class="hero-search__btn" data-i18n="search_btn">Rechercher</button>
+        <div class="hero-search__suggestions" id="hero-search-suggestions" role="listbox" hidden></div>
+      </form>
+      <div class="hero-dark__cta">
+        <a href="catalogue.html" class="btn btn-primary btn-lg" data-i18n="hero_cta">Explorer le catalogue</a>
+        <a href="#families" class="btn btn-ghost btn-lg" data-i18n="hero_cta_secondary">Découvrir les familles</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured product showcase -->
+  <section class="featured-section">
+    <div class="featured-inner" id="featured-product"></div>
+  </section>
+
+  <!-- Browse by family -->
+  <section class="section browse-section" id="families">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-kicker" data-i18n="browse_intro">Parcourir le catalogue</span>
+        <h2 class="section-title section-title--big" data-i18n="browse_by_family">Par famille</h2>
+      </div>
+      <div class="family-rich-grid" id="families-grid"></div>
+    </div>
+  </section>
+
+  <!-- Featured products grid -->
+  <section class="section featured-products-section section-alt">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-kicker" data-i18n="featured_label">Produit vedette</span>
+        <h2 class="section-title section-title--big" data-i18n="featured_products">Produits phares</h2>
+        <p class="section-subtitle" data-i18n="featured_products_subtitle">Une sélection représentative</p>
+      </div>
+      <div class="featured-products-grid" id="featured-products-grid"></div>
+      <div class="featured-products-cta">
+        <a href="catalogue.html" class="btn btn-outline" data-i18n="view_catalogue">Voir tout le catalogue</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recently viewed (hidden by default; JS shows it if localStorage has entries) -->
+  <section class="section recent-products-section" id="recent-products-section" hidden>
+    <div class="section-inner">
+      <div class="section-head">
+        <h2 class="section-title section-title--big" data-i18n="recent_products">Récemment consultés</h2>
+      </div>
+      <div class="product-grid" id="recent-products-grid"></div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <img src="assets/brand/ssa-logo-white-sm.png" alt="SSA" class="logo-img" />
+        </a>
+        <span class="footer-tagline">Solutions d'éclairage LED professionnel</span>
+      </div>
+      <div class="footer-contact"><a href="mailto:ssa@ssa.green">ssa@ssa.green</a><span class="dot"></span><span>04 84 85 60 32</span><span class="dot"></span><span>118 rue Anthonin Bonnaud, 84120 Pertuis</span></div>
+      <div class="footer-copy">SSA — Solutions Solaires Adaptées · © 2026 — Tous droits réservés</div>
+    </div>
+  </footer>
+
+  <script src="script.js?v=22"></script>
+  <script>initHome();</script>
+</body>
+</html>

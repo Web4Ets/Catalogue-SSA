@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SSA Catalogue</title>
+  <link rel="icon" type="image/png" href="assets/brand/ssa-logo-sm.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=22" />
+</head>
+<body>
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="SSA Catalogue">
+        <img src="assets/brand/ssa-logo-sm.png" alt="SSA" class="logo-img logo-img--light" />
+      </a>
+      <nav class="nav">
+        <a href="index.html" data-i18n="home">Accueil</a>
+        <a href="catalogue.html" class="active" data-i18n="catalogue">Catalogue</a>
+      </nav>
+      <div class="lang-switch" role="tablist" aria-label="Language">
+        <button data-lang="fr" type="button">FR</button>
+        <button data-lang="en" type="button">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="product-page">
+    <div id="product-container"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <img src="assets/brand/ssa-logo-white-sm.png" alt="SSA" class="logo-img" />
+        </a>
+        <span class="footer-tagline">Solutions d'éclairage LED professionnel</span>
+      </div>
+      <div class="footer-contact"><a href="mailto:ssa@ssa.green">ssa@ssa.green</a><span class="dot"></span><span>04 84 85 60 32</span><span class="dot"></span><span>118 rue Anthonin Bonnaud, 84120 Pertuis</span></div>
+      <div class="footer-copy">SSA — Solutions Solaires Adaptées · © 2026 — Tous droits réservés</div>
+    </div>
+  </footer>
+
+  <script src="script.js?v=22"></script>
+  <script>initProduct();</script>
+</body>
+</html>
