@@ -1323,7 +1323,10 @@ function initImageLightbox() {
     lightboxWired = true;
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
   }
-  const imgs = document.querySelectorAll('.product-figure img, .product-detail-image img');
+  // Only the MAIN product image opens the zoom lightbox. Gallery thumbnails
+  // (.pf-thumb img) must NOT open it — clicking a thumb only swaps the main
+  // image into place (see initFigureThumbs).
+  const imgs = document.querySelectorAll('.product-figure__img, .product-detail-image img');
   imgs.forEach((img) => {
     img.classList.add('is-zoomable');
     img.addEventListener('click', () => openLightbox(img.src, img.alt));
