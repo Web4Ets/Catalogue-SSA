@@ -110,7 +110,7 @@ PRODUCTS = [
     {
         "id": "solar-street-pro", "name": "Solar Street Pro", "family": "solaire",
         "prefixes": ["42 01"],
-        "p2": None, "gallery_dirs": [],
+        "p2": "42 01 00.png", "gallery_dirs": ["42 01 00"],
         "description_fr": "Version renforcée du lampadaire solaire tout-en-un avec batterie surdimensionnée 35 Ah offrant deux jours d'autonomie sans soleil. Pour sites exigeant une continuité de service maximale.",
         "description_en": "Heavy-duty version of the all-in-one solar street light with an oversized 35 Ah battery delivering two full days of autonomy without sun. For sites demanding maximum service continuity.",
         "features_fr": ["Tout-en-un", "Autonomie 2 jours", "25W", "5000 lm", "2200-6500K", "Batterie 12.8V 35AH"],
