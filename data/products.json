@@ -2212,6 +2212,12 @@
           "dimensions": "",
           "weight": ""
         }
+      ],
+      "gallery": [
+        "ufo.webp",
+        "ufo-2.webp",
+        "ufo-3.webp",
+        "ufo-4.webp"
       ]
     },
     {
@@ -2312,6 +2318,11 @@
           "dimensions": "",
           "weight": ""
         }
+      ],
+      "gallery": [
+        "ufi.webp",
+        "ufi-2.webp",
+        "ufi-3.webp"
       ]
     },
     {

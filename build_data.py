@@ -236,7 +236,7 @@ PRODUCTS = [
     {
         "id": "ufo", "name": "UFO", "family": "industriel",
         "prefixes": ["64 00"], "ref_filter": "UFS01",
-        "p2": None, "gallery_dirs": [],
+        "p2": "64 00 10.png", "gallery_dirs": ["64 00 10"],
         "description_fr": "Suspension industrielle UFO 180 lm/W, IP65 et IK08, de 100 W à 200 W. Pour halls, entrepôts et ateliers à grande hauteur sous plafond.",
         "description_en": "UFO industrial high-bay, 180 lm/W, IP65 and IK08, from 100 W to 200 W. For halls, warehouses and workshops with high ceilings.",
         "features_fr": ["180 lm/W", "IP65", "IK08", "100-200W", "2300-6500K"],
@@ -245,7 +245,7 @@ PRODUCTS = [
     {
         "id": "ufi", "name": "UFI", "family": "industriel",
         "prefixes": ["64 00", "64 01"], "ref_filter": "UFP23",
-        "p2": None, "gallery_dirs": [],
+        "p2": "64 01 10.png", "gallery_dirs": ["64 01 10"],
         "description_fr": "Suspension industrielle UFI 180 lm/W, IP65 et IK08, de 100 W à 300 W. La version haute puissance pour les très grands volumes industriels.",
         "description_en": "UFI industrial high-bay, 180 lm/W, IP65 and IK08, from 100 W to 300 W. The high-power version for very large industrial volumes.",
         "features_fr": ["180 lm/W", "IP65", "IK08", "100-300W", "2300-6500K"],
