@@ -257,11 +257,37 @@ function parseWatts(s) {
   return m ? parseFloat(m[1]) : null;
 }
 
+// Concatenated searchable text for a product: name, family, features,
+// applications (labelled), and every variant field (code, designation, power,
+// flux, efficacy, CCT, panel, battery). Lets the search match on specs, not
+// just the name/code.
+function productHaystack(p) {
+  const dict = STATE.data.i18n[STATE.lang] || {};
+  const appLabels = dict.app_labels || {};
+  const fam = STATE.data.families.find(f => f.id === p.family_id);
+  const parts = [p.name_slx, fam ? familyName(fam) : ''];
+  (p.features_fr || []).forEach(f => parts.push(f));
+  (p.applications || []).forEach(k => parts.push(appLabels[k] || k));
+  (p.tech_specs || []).forEach(s => parts.push(STATE.lang === 'fr' ? s.fr : s.en));
+  for (const v of p.variants) {
+    parts.push(v.code_slx, v.designation, v.power, v.lumen, v.efficacy, v.cct, v.panel, v.battery);
+  }
+  return parts.filter(Boolean).join(' ').toLowerCase();
+}
+// Match a query against the haystack; also compares space-stripped forms so
+// "100w" matches "100 W" and "2300-6500k" matches "2300-6500K".
+function productMatchesQuery(p, q) {
+  if (!q) return true;
+  const hay = productHaystack(p);
+  return hay.includes(q) || hay.replace(/\s+/g, '').includes(q.replace(/\s+/g, ''));
+}
+
 function extractFilterOptions(products) {
   // Auto-discover filter values from product data. No hardcoded list.
   const ipCounts = new Map();
   const ikCounts = new Map();
   const featCounts = new Map();
+  const appCounts = new Map();
   let pmin = Infinity, pmax = -Infinity;
 
   // Noise filters — these patterns appear in features but aren't useful as chip filters.
@@ -279,6 +305,7 @@ function extractFilterOptions(products) {
       else if (/^IK\d+$/i.test(f)) ikCounts.set(f, (ikCounts.get(f) || 0) + 1);
       else if (!isNoise(f)) featCounts.set(f, (featCounts.get(f) || 0) + 1);
     }
+    for (const k of (p.applications || [])) appCounts.set(k, (appCounts.get(k) || 0) + 1);
     for (const v of p.variants) {
       const w = parseWatts(v.power);
       if (w !== null) {
@@ -300,6 +327,7 @@ function extractFilterOptions(products) {
       .sort(sortByCountDesc)
       .slice(0, 24)
       .map(([v]) => v),
+    apps: [...appCounts.entries()].sort(sortByCountDesc).map(([k]) => k),
     pmin: pmin === Infinity ? 0 : Math.floor(pmin),
     pmax: pmax === -Infinity ? 1000 : Math.ceil(pmax),
   };
@@ -316,18 +344,20 @@ function getUrlFilters() {
     ip: csv('ip'),
     ik: csv('ik'),
     feat: csv('feat'),
+    app: csv('app'),
     pmin: num('pmin'),
     pmax: num('pmax'),
   };
 }
 
-function setUrlFilters({ family, q, ip, ik, feat, pmin, pmax, defaultPmin, defaultPmax }) {
+function setUrlFilters({ family, q, ip, ik, feat, app, pmin, pmax, defaultPmin, defaultPmax }) {
   const params = new URLSearchParams();
   if (family && family !== 'all') params.set('family', family);
   if (q) params.set('q', q);
   if (ip?.length) params.set('ip', ip.join(','));
   if (ik?.length) params.set('ik', ik.join(','));
   if (feat?.length) params.set('feat', feat.join(','));
+  if (app?.length) params.set('app', app.join(','));
   if (pmin != null && defaultPmin != null && pmin > defaultPmin) params.set('pmin', String(pmin));
   if (pmax != null && defaultPmax != null && pmax < defaultPmax) params.set('pmax', String(pmax));
   const qs = params.toString();
@@ -345,6 +375,7 @@ function getActiveAdvancedFilters() {
     ip: collect('ip'),
     ik: collect('ik'),
     feat: collect('feat'),
+    app: collect('app'),
     pmin: pminInput && pminInput.value !== '' ? Number(pminInput.value) : null,
     pmax: pmaxInput && pmaxInput.value !== '' ? Number(pmaxInput.value) : null,
   };
@@ -364,25 +395,21 @@ function renderCatalogue() {
 
   setUrlFilters({
     family: selectedFamily, q: query,
-    ip: adv.ip, ik: adv.ik, feat: adv.feat,
+    ip: adv.ip, ik: adv.ik, feat: adv.feat, app: adv.app,
     pmin: adv.pmin, pmax: adv.pmax,
     defaultPmin: opts.pmin, defaultPmax: opts.pmax,
   });
 
   const filtered = data.products.filter(p => {
     if (selectedFamily !== 'all' && p.family_id !== selectedFamily) return false;
-    if (query) {
-      const match = p.name_slx.toLowerCase().includes(query)
-        || p.variants.some(v =>
-            (v.code_slx || '').toLowerCase().includes(query) ||
-            (v.designation || '').toLowerCase().includes(query));
-      if (!match) return false;
-    }
+    if (!productMatchesQuery(p, query)) return false;
     const features = new Set(p.features_fr || []);
-    // IP / IK / Feat = OR within group (multi-select = "any of these")
+    const apps = new Set(p.applications || []);
+    // IP / IK / Feat / App = OR within group (multi-select = "any of these")
     if (adv.ip.length && !adv.ip.some(v => features.has(v))) return false;
     if (adv.ik.length && !adv.ik.some(v => features.has(v))) return false;
     if (adv.feat.length && !adv.feat.some(v => features.has(v))) return false;
+    if (adv.app.length && !adv.app.some(v => apps.has(v))) return false;
     // Power range: at least one variant with wattage in [pmin..pmax]
     const hasPmin = adv.pmin != null && adv.pmin > opts.pmin;
     const hasPmax = adv.pmax != null && adv.pmax < opts.pmax;
@@ -399,7 +426,8 @@ function renderCatalogue() {
     return true;
   });
 
-  renderActiveFilters({ family: selectedFamily, ...adv, opts });
+  const famCount = new Set(filtered.map(p => p.family_id)).size;
+  renderActiveFilters({ family: selectedFamily, ...adv, opts, count: filtered.length, famCount });
 
   if (filtered.length === 0) {
     container.innerHTML = `<div class="empty-state">${t('no_results')}</div>`;
@@ -419,9 +447,7 @@ function renderCatalogue() {
   const cmp = productSortComparator(STATE.catalogueSort);
   if (cmp) presentFamilies.forEach(f => groups[f.id].sort(cmp));
 
-  // Results summary (count of products + families currently shown)
-  const summaryHtml = `<p class="catalogue-summary">${filtered.length} ${escapeHtml(t('products_count'))}`
-    + ` · ${presentFamilies.length} ${escapeHtml(t('families_label'))}</p>`;
+  // (Results count is shown in the sticky active-filters bar — see renderActiveFilters.)
 
   // Family quick-nav (jump to a section) — only useful with >1 family visible
   const quicknavHtml = presentFamilies.length > 1
@@ -450,7 +476,7 @@ function renderCatalogue() {
       `;
     }).join('');
 
-  container.innerHTML = summaryHtml + quicknavHtml + sectionsHtml;
+  container.innerHTML = quicknavHtml + sectionsHtml;
   container.querySelectorAll('.famzip-btn').forEach(b =>
     b.addEventListener('click', () => downloadFamilyZip(b.dataset.familyZip, b)));
 }
@@ -519,33 +545,81 @@ function initSortSelect() {
     .join('');
 }
 
-function renderActiveFilters({ family, ip, ik, feat, pmin, pmax, opts }) {
+function renderActiveFilters({ family, ip, ik, feat, app, pmin, pmax, opts, count, famCount }) {
   const el = document.getElementById('active-filters');
   if (!el) return;
+  const appLabels = (STATE.data.i18n[STATE.lang] || {}).app_labels || {};
+  // Each chip carries enough data to remove that one filter individually.
   const chips = [];
   if (family !== 'all') {
     const f = STATE.data.families.find(x => x.id === family);
-    if (f) chips.push(`${t('family')}: ${familyName(f)}`);
+    if (f) chips.push({ label: `${t('family')} : ${familyName(f)}`, type: 'family' });
   }
-  ip?.forEach(v => chips.push(`IP: ${v}`));
-  ik?.forEach(v => chips.push(`IK: ${v}`));
-  feat?.forEach(v => chips.push(v));
+  ip?.forEach(v => chips.push({ label: `IP : ${v}`, type: 'chip', key: 'ip', value: v }));
+  ik?.forEach(v => chips.push({ label: `IK : ${v}`, type: 'chip', key: 'ik', value: v }));
+  feat?.forEach(v => chips.push({ label: v, type: 'chip', key: 'feat', value: v }));
+  app?.forEach(v => chips.push({ label: appLabels[v] || v, type: 'chip', key: 'app', value: v }));
   const pminActive = pmin != null && opts && pmin > opts.pmin;
   const pmaxActive = pmax != null && opts && pmax < opts.pmax;
   if (pminActive || pmaxActive) {
     const lo = pminActive ? pmin : opts.pmin;
     const hi = pmaxActive ? pmax : opts.pmax;
-    chips.push(`${t('power_label')}: ${lo}–${hi}W`);
+    chips.push({ label: `${t('power_label')} : ${lo}–${hi} W`, type: 'power' });
   }
-  if (chips.length === 0) {
-    el.innerHTML = '';
-    return;
-  }
-  el.innerHTML = `
-    <span class="filtered-by-label">${escapeHtml(t('filtered_by'))} :</span>
-    ${chips.map(c => `<span class="filter-chip">${escapeHtml(c)}</span>`).join('')}
-    <a href="catalogue.html" class="filter-clear">${escapeHtml(t('clear_filter'))}</a>
-  `;
+
+  const countHtml = count != null
+    ? `<span class="results-count"><strong>${count}</strong> ${escapeHtml(t('products_count'))}`
+      + (famCount != null ? ` · ${famCount} ${escapeHtml(t('families_label'))}` : '') + `</span>`
+    : '';
+  const chipsHtml = chips.map(c => `
+    <span class="filter-chip filter-chip--removable" data-chip-type="${c.type}"`
+      + (c.key ? ` data-chip-key="${escapeHtml(c.key)}"` : '')
+      + (c.value != null ? ` data-chip-value="${escapeHtml(c.value)}"` : '') + `>
+      <span>${escapeHtml(c.label)}</span>
+      <button type="button" class="filter-chip__x" aria-label="${escapeHtml(t('remove'))}">×</button>
+    </span>`).join('');
+
+  el.innerHTML = countHtml
+    + (chips.length
+      ? `<span class="filtered-by-label">${escapeHtml(t('filtered_by'))} :</span>${chipsHtml}`
+        + `<button type="button" class="filter-clear" id="active-clear">${escapeHtml(t('clear_filter'))}</button>`
+      : '');
+  el.classList.toggle('is-empty', count == null && chips.length === 0);
+}
+
+// Reset every catalogue filter in place (used by the "clear all" button).
+function resetAllFilters() {
+  const ff = document.getElementById('family-filter'); if (ff) ff.value = 'all';
+  document.querySelectorAll('.filter-chip-btn.is-active').forEach(b => b.classList.remove('is-active'));
+  const a = document.getElementById('filter-pmin'), b = document.getElementById('filter-pmax');
+  if (a && STATE.filterOpts) a.value = STATE.filterOpts.pmin;
+  if (b && STATE.filterOpts) b.value = STATE.filterOpts.pmax;
+  const si = document.getElementById('search-input'); if (si) si.value = '';
+  renderCatalogue();
+}
+
+// Delegated handler: remove a single active-filter chip (or clear all).
+function initActiveFilterRemoval() {
+  const el = document.getElementById('active-filters');
+  if (!el || el.dataset.removalWired) return;
+  el.dataset.removalWired = '1';
+  el.addEventListener('click', (e) => {
+    if (e.target.closest('#active-clear')) { resetAllFilters(); return; }
+    if (!e.target.closest('.filter-chip__x')) return;
+    const chip = e.target.closest('.filter-chip--removable');
+    const type = chip.dataset.chipType;
+    if (type === 'family') {
+      const ff = document.getElementById('family-filter'); if (ff) ff.value = 'all';
+    } else if (type === 'power') {
+      const a = document.getElementById('filter-pmin'), b = document.getElementById('filter-pmax');
+      if (a && STATE.filterOpts) a.value = STATE.filterOpts.pmin;
+      if (b && STATE.filterOpts) b.value = STATE.filterOpts.pmax;
+    } else if (type === 'chip') {
+      document.querySelectorAll(`.filter-chip-btn[data-filter-key="${chip.dataset.chipKey}"]`)
+        .forEach(btn => { if (btn.dataset.filterValue === chip.dataset.chipValue) btn.classList.remove('is-active'); });
+    }
+    renderCatalogue();
+  });
 }
 
 function renderFilterControls() {
@@ -555,7 +629,8 @@ function renderFilterControls() {
   STATE.filterOpts = opts;
   const current = getUrlFilters();
 
-  const chipGroup = (label, key, values, currentValues) => {
+  const appLabels = (STATE.data.i18n[STATE.lang] || {}).app_labels || {};
+  const chipGroup = (label, key, values, currentValues, labelOf) => {
     if (!values.length) return '';
     return `
       <div class="filter-group">
@@ -563,14 +638,15 @@ function renderFilterControls() {
         <div class="filter-group__chips">
           ${values.map(v => {
             const active = currentValues.includes(v);
-            return `<button type="button" class="filter-chip-btn ${active ? 'is-active' : ''}" data-filter-key="${key}" data-filter-value="${escapeHtml(v)}">${escapeHtml(v)}</button>`;
+            const disp = labelOf ? labelOf(v) : v;
+            return `<button type="button" class="filter-chip-btn ${active ? 'is-active' : ''}" data-filter-key="${key}" data-filter-value="${escapeHtml(v)}">${escapeHtml(disp)}</button>`;
           }).join('')}
         </div>
       </div>
     `;
   };
 
-  const anyActive = current.ip.length || current.ik.length || current.feat.length
+  const anyActive = current.ip.length || current.ik.length || current.feat.length || current.app.length
     || (current.pmin != null && current.pmin > opts.pmin)
     || (current.pmax != null && current.pmax < opts.pmax);
 
@@ -580,6 +656,7 @@ function renderFilterControls() {
       <span class="filter-toggle-btn__arrow">▼</span>
     </button>
     <div class="filter-panel" id="filter-panel" ${anyActive ? '' : 'hidden'}>
+      ${chipGroup(t('applications_title'), 'app', opts.apps, current.app, k => appLabels[k] || k)}
       ${chipGroup(t('ip_label'), 'ip', opts.ips, current.ip)}
       ${chipGroup(t('ik_label'), 'ik', opts.iks, current.ik)}
       ${chipGroup(t('features_label'), 'feat', opts.feats, current.feat)}
@@ -1412,11 +1489,7 @@ function initHeroSearch() {
   const goCatalogue = (q) => {
     location.href = 'catalogue.html' + (q ? '?q=' + encodeURIComponent(q) : '');
   };
-  const matchesFor = (q) => STATE.data.products.filter(p =>
-    p.name_slx.toLowerCase().includes(q) ||
-    p.variants.some(v => (v.code_slx || '').toLowerCase().includes(q)
-                      || (v.designation || '').toLowerCase().includes(q))
-  );
+  const matchesFor = (q) => STATE.data.products.filter(p => productMatchesQuery(p, q));
   const renderSuggestions = () => {
     const q = input.value.trim().toLowerCase();
     if (q.length < 2) { box.hidden = true; box.innerHTML = ''; return; }
@@ -1476,6 +1549,7 @@ async function initCatalogue() {
 
   renderFilterControls();
   initViewToggle();
+  initActiveFilterRemoval();
   renderCatalogue();
   initBackToTop();
   initCompare();
