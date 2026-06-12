@@ -530,6 +530,29 @@ TECH_SPECS = {
     ],
 }
 
+# ── Applications recommandées par produit (« MAIN APPLICATIONS » du catalogue) ──
+# Clés rendues en pictogrammes + libellés (voir i18n app_labels / APP_ICONS dans script.js).
+APPLICATIONS = {
+    "solar-street":     ["roads", "residential", "parking", "large_areas", "railway"],
+    "solar-street-pro": ["roads", "residential", "parking", "large_areas", "railway"],
+    "all-in-two-solar": ["roads", "large_areas", "parking", "railway", "industrial"],
+    "solar-road":       ["roads", "large_areas", "parking", "railway", "industrial"],
+    "solar-road-pro":   ["roads", "large_areas", "parking", "railway", "industrial"],
+    "resilight":        ["residential", "pedestrian", "squares", "parking", "bridges"],
+    "tub":              ["roads", "large_areas", "industrial"],
+    "azur":             ["residential", "pedestrian", "squares", "parking", "bridges"],
+    "mistral":          ["residential", "pedestrian", "squares", "parking", "railway"],
+    "street-core":      ["roads", "large_areas", "parking", "railway", "accent"],
+    "street-plus":      ["roads", "large_areas", "parking", "railway", "accent"],
+    "street-pro":       ["roads", "large_areas", "parking", "railway", "accent"],
+    "rock":             ["industrial", "large_areas", "sport", "parking", "tunnels"],
+    "arena":            ["sport", "industrial", "large_areas", "accent", "tunnels"],
+    "ride-stadium":     ["sport", "industrial", "large_areas", "accent", "tunnels"],
+    "poursuit-focus":   ["sport", "accent", "industrial", "large_areas", "tunnels"],
+    "ufo":              ["industrial", "large_areas", "sport", "parking"],
+    "ufi":              ["industrial", "large_areas", "sport", "parking"],
+}
+
 I18N = {
     "fr": {
         "site_title": "SSA Catalogue — Éclairage Solaire & LED",
@@ -600,6 +623,15 @@ I18N = {
         "compare_attribute": "Caractéristique",
         "compare_variants": "Références",
         "technical_specs": "Caractéristiques techniques",
+        "applications_title": "Applications recommandées",
+        "app_labels": {
+            "roads": "Routes & autoroutes", "residential": "Rues résidentielles",
+            "pedestrian": "Pistes cyclables & piétons", "squares": "Places & zones piétonnes",
+            "parking": "Parkings", "bridges": "Ponts", "railway": "Gares & métros",
+            "large_areas": "Grandes surfaces", "industrial": "Halls & entrepôts",
+            "sport": "Équipements sportifs", "tunnels": "Tunnels & passages",
+            "accent": "Mise en valeur & architectural",
+        },
         "table_headers": {
             "code_slx": "Code SSA",
             "designation": "Désignation",
@@ -702,6 +734,15 @@ I18N = {
         "compare_attribute": "Attribute",
         "compare_variants": "References",
         "technical_specs": "Technical specifications",
+        "applications_title": "Recommended applications",
+        "app_labels": {
+            "roads": "Roads & motorways", "residential": "Urban & residential streets",
+            "pedestrian": "Bike & pedestrian paths", "squares": "Squares & pedestrian areas",
+            "parking": "Car parks", "bridges": "Bridges", "railway": "Railway stations & metros",
+            "large_areas": "Large areas", "industrial": "Industrial halls & warehouses",
+            "sport": "Sports facilities", "tunnels": "Tunnels & underpasses",
+            "accent": "Accent & architectural",
+        },
         "table_headers": {
             "code_slx": "SSA code",
             "designation": "Designation",
@@ -871,6 +912,7 @@ def build():
             "datasheet_en": f"{meta['id']}-en.pdf",
             "table_columns": cols,
             "tech_specs": specs,
+            "applications": APPLICATIONS.get(meta["id"], []),
             "variants": variants,
         }
         if gallery:

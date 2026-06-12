@@ -149,6 +149,13 @@
           "en": "2 rainy days"
         }
       ],
+      "applications": [
+        "roads",
+        "residential",
+        "parking",
+        "large_areas",
+        "railway"
+      ],
       "variants": [
         {
           "code_slx": "42 00 02",
@@ -253,6 +260,13 @@
           "fr": "2 jours de pluie",
           "en": "2 rainy days"
         }
+      ],
+      "applications": [
+        "roads",
+        "residential",
+        "parking",
+        "large_areas",
+        "railway"
       ],
       "variants": [
         {
@@ -385,6 +399,13 @@
           "en": "Battery 3 yr · Product 5 yr"
         }
       ],
+      "applications": [
+        "residential",
+        "pedestrian",
+        "squares",
+        "parking",
+        "bridges"
+      ],
       "variants": [
         {
           "code_slx": "42 02 10",
@@ -474,6 +495,13 @@
           "en": "CB · CE · ErP · ISO9001 · ISO14001 · UN38.4"
         }
       ],
+      "applications": [
+        "roads",
+        "large_areas",
+        "parking",
+        "railway",
+        "industrial"
+      ],
       "variants": [
         {
           "code_slx": "42 03 06",
@@ -553,6 +581,13 @@
           "fr": "1 à 3 jours de pluie",
           "en": "1 to 3 rainy days"
         }
+      ],
+      "applications": [
+        "roads",
+        "large_areas",
+        "parking",
+        "railway",
+        "industrial"
       ],
       "variants": [
         {
@@ -638,6 +673,13 @@
           "fr": "1 à 3 jours de pluie",
           "en": "1 to 3 rainy days"
         }
+      ],
+      "applications": [
+        "roads",
+        "large_areas",
+        "parking",
+        "railway",
+        "industrial"
       ],
       "variants": [
         {
@@ -778,6 +820,13 @@
           "fr": "> 90%",
           "en": "> 90%"
         }
+      ],
+      "applications": [
+        "residential",
+        "pedestrian",
+        "squares",
+        "parking",
+        "bridges"
       ],
       "variants": [
         {
@@ -1009,6 +1058,13 @@
           "en": "Built-in or detachable driver · NEMA · photocell"
         }
       ],
+      "applications": [
+        "residential",
+        "pedestrian",
+        "squares",
+        "parking",
+        "railway"
+      ],
       "variants": [
         {
           "code_slx": "50 05 50",
@@ -1132,6 +1188,13 @@
           "fr": "> 90%",
           "en": "> 90%"
         }
+      ],
+      "applications": [
+        "roads",
+        "large_areas",
+        "parking",
+        "railway",
+        "accent"
       ],
       "variants": [
         {
@@ -1276,6 +1339,13 @@
           "fr": "> 90%",
           "en": "> 90%"
         }
+      ],
+      "applications": [
+        "roads",
+        "large_areas",
+        "parking",
+        "railway",
+        "accent"
       ],
       "variants": [
         {
@@ -1436,6 +1506,13 @@
           "en": "> 90%"
         }
       ],
+      "applications": [
+        "roads",
+        "large_areas",
+        "parking",
+        "railway",
+        "accent"
+      ],
       "variants": [
         {
           "code_slx": "53 00 50",
@@ -1587,6 +1664,13 @@
           "fr": "> 90%",
           "en": "> 90%"
         }
+      ],
+      "applications": [
+        "industrial",
+        "large_areas",
+        "sport",
+        "parking",
+        "tunnels"
       ],
       "variants": [
         {
@@ -1753,6 +1837,13 @@
           "en": "> 90%"
         }
       ],
+      "applications": [
+        "sport",
+        "industrial",
+        "large_areas",
+        "accent",
+        "tunnels"
+      ],
       "variants": [
         {
           "code_slx": "61 00 50",
@@ -1891,6 +1982,13 @@
           "fr": "> 90%",
           "en": "> 90%"
         }
+      ],
+      "applications": [
+        "sport",
+        "industrial",
+        "large_areas",
+        "accent",
+        "tunnels"
       ],
       "variants": [
         {
@@ -2069,6 +2167,13 @@
           "en": "> 90%"
         }
       ],
+      "applications": [
+        "sport",
+        "accent",
+        "industrial",
+        "large_areas",
+        "tunnels"
+      ],
       "variants": [
         {
           "code_slx": "63 00 50",
@@ -2175,6 +2280,12 @@
           "en": "-30°C ~ 50°C"
         }
       ],
+      "applications": [
+        "industrial",
+        "large_areas",
+        "sport",
+        "parking"
+      ],
       "variants": [
         {
           "code_slx": "64 00 10",
@@ -2268,6 +2379,12 @@
           "fr": "-30°C ~ 50°C",
           "en": "-30°C ~ 50°C"
         }
+      ],
+      "applications": [
+        "industrial",
+        "large_areas",
+        "sport",
+        "parking"
       ],
       "variants": [
         {
@@ -2396,6 +2513,11 @@
           "en": "360° reception · self-cleaning"
         }
       ],
+      "applications": [
+        "roads",
+        "large_areas",
+        "industrial"
+      ],
       "variants": [
         {
           "code_slx": "10 00 20",
@@ -2508,6 +2630,21 @@
       "compare_attribute": "Caractéristique",
       "compare_variants": "Références",
       "technical_specs": "Caractéristiques techniques",
+      "applications_title": "Applications recommandées",
+      "app_labels": {
+        "roads": "Routes & autoroutes",
+        "residential": "Rues résidentielles",
+        "pedestrian": "Pistes cyclables & piétons",
+        "squares": "Places & zones piétonnes",
+        "parking": "Parkings",
+        "bridges": "Ponts",
+        "railway": "Gares & métros",
+        "large_areas": "Grandes surfaces",
+        "industrial": "Halls & entrepôts",
+        "sport": "Équipements sportifs",
+        "tunnels": "Tunnels & passages",
+        "accent": "Mise en valeur & architectural"
+      },
       "table_headers": {
         "code_slx": "Code SSA",
         "designation": "Désignation",
@@ -2627,6 +2764,21 @@
       "compare_attribute": "Attribute",
       "compare_variants": "References",
       "technical_specs": "Technical specifications",
+      "applications_title": "Recommended applications",
+      "app_labels": {
+        "roads": "Roads & motorways",
+        "residential": "Urban & residential streets",
+        "pedestrian": "Bike & pedestrian paths",
+        "squares": "Squares & pedestrian areas",
+        "parking": "Car parks",
+        "bridges": "Bridges",
+        "railway": "Railway stations & metros",
+        "large_areas": "Large areas",
+        "industrial": "Industrial halls & warehouses",
+        "sport": "Sports facilities",
+        "tunnels": "Tunnels & underpasses",
+        "accent": "Accent & architectural"
+      },
       "table_headers": {
         "code_slx": "SSA code",
         "designation": "Designation",
