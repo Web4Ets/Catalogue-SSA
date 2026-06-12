@@ -36,18 +36,37 @@ WEBP_MAX = 1280      # plus grand côté en px (downscale si plus grand)
 WEBP_QUALITY = 82
 
 
+def whiten_bg(im):
+    """Détoure le fond studio gris/transparent vers du blanc pur, pour que les
+    produits flottent sur un fond uniforme (même algo que la fiche PDF).
+    Lift par luminance gated sur la neutralité → le produit reste intact."""
+    try:
+        import numpy as np
+    except ImportError:
+        return im
+    rgb = im.convert("RGB")
+    a = np.asarray(rgb).astype(np.float32)
+    lum = 0.299 * a[:, :, 0] + 0.587 * a[:, :, 1] + 0.114 * a[:, :, 2]
+    neutral = (a.max(2) - a.min(2)) <= 30
+    f = (np.clip((lum - 185.0) / (200.0 - 185.0), 0, 1) * neutral)[:, :, None]
+    return Image.fromarray((a * (1 - f) + 255 * f).astype("uint8"))
+
+
 def save_webp(src, dst):
-    """Ouvre src (PNG), downscale à WEBP_MAX, enregistre en WebP optimisé."""
+    """Ouvre src (PNG), aplatit la transparence/le fond gris sur blanc, downscale
+    à WEBP_MAX, enregistre en WebP optimisé. Les produits flottent sur blanc."""
     im = Image.open(src)
     if im.mode in ("P", "LA"):
         im = im.convert("RGBA")
+    if im.mode == "RGBA":                       # transparence → composite sur blanc
+        bg = Image.new("RGB", im.size, (255, 255, 255))
+        bg.paste(im, mask=im.split()[-1])
+        im = bg
     if max(im.size) > WEBP_MAX:
         scale = WEBP_MAX / max(im.size)
         im = im.resize((round(im.width * scale), round(im.height * scale)), Image.LANCZOS)
-    if im.mode == "RGBA":
-        im.save(dst, "WEBP", quality=WEBP_QUALITY, method=6)
-    else:
-        im.convert("RGB").save(dst, "WEBP", quality=WEBP_QUALITY, method=6)
+    im = whiten_bg(im)                          # fond gris studio → blanc pur
+    im.convert("RGB").save(dst, "WEBP", quality=WEBP_QUALITY, method=6)
 
 # ── 1. Familles ────────────────────────────────────────────────────────────
 FAMILIES = [
