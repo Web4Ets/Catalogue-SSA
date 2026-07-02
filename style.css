@@ -165,6 +165,29 @@ img { max-width: 100%; display: block; }
   border-bottom-color: var(--color-primary);
 }
 
+/* En-tête : lien « Devis » permanent avec badge compteur. */
+.header-actions { display: inline-flex; align-items: center; gap: 16px; }
+.header-devis {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 14px; border-radius: 999px;
+  border: 1.5px solid var(--color-primary);
+  color: var(--color-primary-text); font-weight: 600; font-size: 14px;
+  text-decoration: none; white-space: nowrap;
+}
+.header-devis:hover { background: rgba(247,166,0,0.10); text-decoration: none; }
+.header-devis.active { background: var(--color-primary); color: var(--ssa-black); }
+.header-devis .icon { width: 17px; height: 17px; }
+.header-devis__count {
+  min-width: 18px; height: 18px; padding: 0 5px;
+  background: var(--color-primary); color: var(--ssa-black);
+  border-radius: 999px; font-size: 11px; font-weight: 800;
+  display: inline-grid; place-items: center;
+}
+.header-devis.active .header-devis__count { background: var(--ssa-black); color: #fff; }
+.site-header--transparent:not(.site-header--solid) .header-devis { color: #fff; border-color: rgba(255,255,255,0.5); }
+.site-header--transparent:not(.site-header--solid) .header-devis:hover { background: rgba(255,255,255,0.12); }
+@media (max-width: 640px) { .header-devis__label { display: none; } .header-actions { gap: 10px; } }
+
 .lang-switch {
   display: inline-flex;
   background: var(--color-bg);

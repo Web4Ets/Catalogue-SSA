@@ -1,5 +1,6 @@
 ---
 import { i18n } from '../lib/catalogue.js';
+import { icon } from '../lib/icons.js';
 
 const {
   title = 'SSA Catalogue — Éclairage Solaire & LED',
@@ -42,9 +43,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
         <a href="/" class={active === 'home' ? 'active' : ''} data-i18n="home">Accueil</a>
         <a href="/catalogue/" class={active === 'catalogue' ? 'active' : ''} data-i18n="catalogue">Catalogue</a>
       </nav>
-      <div class={transparent ? 'lang-switch lang-switch--dark' : 'lang-switch'} role="tablist" aria-label="Language">
-        <button data-lang="fr" type="button">FR</button>
-        <button data-lang="en" type="button">EN</button>
+      <div class="header-actions">
+        <a href="/devis/" class={`header-devis${active === 'devis' ? ' active' : ''}`} aria-label="Devis">
+          <span class="header-devis__icon" set:html={icon('quote')}></span>
+          <span class="header-devis__label" data-i18n="quote_bar_title">Devis</span>
+          <span class="header-devis__count" id="header-devis-count" hidden>0</span>
+        </a>
+        <div class={transparent ? 'lang-switch lang-switch--dark' : 'lang-switch'} role="tablist" aria-label="Language">
+          <button data-lang="fr" type="button">FR</button>
+          <button data-lang="en" type="button">EN</button>
+        </div>
       </div>
     </div>
   </header>

@@ -55,6 +55,7 @@ function syncButtons() {
 }
 
 function renderBar() {
+  window.SSA.updateDevisBadge();
   let bar = document.getElementById('devis-bar');
   const items = getItems();
   if (!items.length) { if (bar) bar.remove(); return; }

@@ -102,9 +102,20 @@ document.addEventListener('error', (e) => {
   }
 }, true);
 
+// Compteur de références du devis dans l'en-tête (badge).
+function updateDevisBadge() {
+  const el = document.getElementById('header-devis-count');
+  if (!el) return;
+  let n = 0;
+  try { n = (JSON.parse(localStorage.getItem('devis') || '[]') || []).length; } catch (e) {}
+  el.textContent = String(n);
+  el.hidden = n === 0;
+}
+
 initLang();
 initHeaderScroll();
 initBackToTop();
+updateDevisBadge();
 
 // Charge products.json une seule fois (mémoïsé) — pour recherche hero & comparateur.
 let _dataPromise = null;
@@ -121,5 +132,6 @@ window.SSA = {
   loadData,
   applyI18n,
   icon,
+  updateDevisBadge,
   onLangChange(cb) { document.addEventListener('ssa:langchange', (e) => cb(e.detail.lang)); },
 };
