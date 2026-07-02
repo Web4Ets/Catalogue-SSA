@@ -1,5 +1,6 @@
 // Script partagé (toutes pages) : i18n client sur DOM pré-rendu, bascule langue,
 // header au scroll, back-to-top, lightbox. Expose window.SSA pour les autres pages.
+import { icon } from '../lib/icons.js';
 const I18N = (typeof window !== 'undefined' && window.__I18N__) || {};
 const STATE = { lang: 'fr' };
 try { STATE.lang = localStorage.getItem('ssa-lang') || 'fr'; } catch (e) {}
@@ -119,5 +120,6 @@ window.SSA = {
   closeLightbox,
   loadData,
   applyI18n,
+  icon,
   onLangChange(cb) { document.addEventListener('ssa:langchange', (e) => cb(e.detail.lang)); },
 };

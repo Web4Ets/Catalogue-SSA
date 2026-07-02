@@ -1,5 +1,6 @@
 ---
 import { familyById, familyName, productWattRange, ipRating, haystack, parseWatts } from '../lib/catalogue.js';
+import { icon } from '../lib/icons.js';
 const { p } = Astro.props;
 const family = familyById(p.family_id);
 const watt = productWattRange(p);
@@ -24,7 +25,7 @@ const pmax = watts.length ? Math.max(...watts) : '';
    data-watts={watts.join(' ')}
    data-haystack={haystack(p, 'fr') + ' ' + haystack(p, 'en')}>
   <span class="compare-toggle" role="button" tabindex="0" data-compare-id={p.id}
-        aria-pressed="false" aria-label="Comparer">⇄</span>
+        aria-pressed="false" aria-label="Comparer" set:html={icon('compare')}></span>
   <div class="product-image">
     <img src={`/assets/images/${p.image}`} alt={p.name_slx} loading="lazy"
          data-fallback-code={p.code_prefix}

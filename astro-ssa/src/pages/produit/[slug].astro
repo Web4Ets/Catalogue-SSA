@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { products, familyById, familyName, tableColumns, APP_ICONS, i18n } from '../../lib/catalogue.js';
+import { icon } from '../../lib/icons.js';
 
 export function getStaticPaths() {
   return products.map((p) => ({ params: { slug: p.id }, props: { p } }));
@@ -24,6 +25,17 @@ const next = siblings[(sIdx + 1) % siblings.length];
 
 const title = `${p.name_slx} — SSA`;
 const desc = p.description_fr.slice(0, 160);
+
+// Bouton « Demander un devis » : mailto pré-rempli (produit, code SSA, lien fiche).
+const productUrl = new URL(`/produit/${p.id}/`, Astro.site).href;
+const firstCode = (p.variants[0] && p.variants[0].code_slx) || p.code_prefix;
+const mailto = (lang) => {
+  const subj = lang === 'en' ? `Quote request — ${p.name_slx}` : `Demande de devis — ${p.name_slx}`;
+  const body = lang === 'en'
+    ? `Hello,\n\nI would like a quote for the following product:\n- Product: ${p.name_slx}\n- SSA code: ${firstCode}\n- Datasheet: ${productUrl}\n\nThank you.`
+    : `Bonjour,\n\nJe souhaite recevoir un devis pour le produit suivant :\n- Produit : ${p.name_slx}\n- Code SSA : ${firstCode}\n- Fiche : ${productUrl}\n\nMerci.`;
+  return `mailto:ssa@ssa.green?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+};
 ---
 <BaseLayout title={title} description={desc} active="catalogue" image={`/assets/images/${p.image}`}>
   <main class="product-page">
@@ -83,11 +95,14 @@ const desc = p.description_fr.slice(0, 160);
             ))}
           </div>
           <div class="download-buttons">
-            <a class="btn-download" download
+            <a class="btn-download btn-download--quote" href={mailto('fr')} data-href-fr={mailto('fr')} data-href-en={mailto('en')}>
+              <Fragment set:html={icon('quote')} /> <span data-fr="Demander un devis" data-en="Request a quote">Demander un devis</span>
+            </a>
+            <a class="btn-download alt" download
                href={`/assets/datasheets/${p.datasheet_fr}`}
                data-href-fr={`/assets/datasheets/${p.datasheet_fr}`}
-               data-href-en={`/assets/datasheets/${p.datasheet_en}`}>📄 <span data-i18n="download_datasheet">Fiche technique</span></a>
-            <button type="button" class="btn-download csv" id="csv-export-btn">📊 <span data-i18n="export_csv">Exporter CSV</span></button>
+               data-href-en={`/assets/datasheets/${p.datasheet_en}`}><Fragment set:html={icon('file')} /> <span data-i18n="download_datasheet">Fiche technique</span></a>
+            <button type="button" class="btn-download csv" id="csv-export-btn"><Fragment set:html={icon('table')} /> <span data-i18n="export_csv">Exporter CSV</span></button>
             <button type="button" class="btn-download alt" id="compare-product-btn" data-compare-id={p.id}></button>
           </div>
         </div>

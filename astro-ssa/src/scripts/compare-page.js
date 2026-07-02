@@ -44,7 +44,7 @@ async function render() {
     ['IP', (p) => esc(ipOf(p))],
     [t('compare_variants'), (p) => String((p.variants || []).length)],
     [t('features'), (p) => feats(p).slice(0, 8).map((f) => `<span class="feature-chip">${esc(f)}</span>`).join(' ')],
-    [t('download_datasheet'), (p) => { const ds = lang === 'fr' ? p.datasheet_fr : p.datasheet_en; return ds ? `<a class="btn-download alt" href="/assets/datasheets/${ds}" download>📄 PDF</a>` : '—'; }],
+    [t('download_datasheet'), (p) => { const ds = lang === 'fr' ? p.datasheet_fr : p.datasheet_en; return ds ? `<a class="btn-download alt" href="/assets/datasheets/${ds}" download>${window.SSA.icon('file')} PDF</a>` : '—'; }],
   ];
 
   const head = `<th class="compare-attr-head">${t('compare_attribute')}</th>` + products.map((p) => `

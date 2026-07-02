@@ -32,7 +32,7 @@ function initCompareButton() {
   const refresh = () => {
     const on = (window.SSA_compare?.isComparing?.(id)) || false;
     btn.classList.toggle('is-active-compare', on);
-    btn.innerHTML = (on ? '✓ ' : '⇄ ') + (on ? window.SSA.t('compare_added') : window.SSA.t('compare'));
+    btn.innerHTML = window.SSA.icon(on ? 'check' : 'compare') + ' ' + (on ? window.SSA.t('compare_added') : window.SSA.t('compare'));
   };
   refresh();
   btn.addEventListener('click', () => { window.SSA_compare.toggleCompare(id); refresh(); });

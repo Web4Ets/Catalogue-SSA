@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductCard from '../components/ProductCard.astro';
 import { products, families, familyName, extractFilterOptions, i18n } from '../lib/catalogue.js';
+import { icon } from '../lib/icons.js';
 
 const opts = extractFilterOptions();
 const appLabel = (k) => ({ fr: (i18n.fr.app_labels || {})[k] || k, en: (i18n.en.app_labels || {})[k] || k });
@@ -31,8 +32,8 @@ const grouped = families
           <option value="power_desc" data-i18n="sort_power_desc">Puissance décroissante</option>
         </select>
         <div class="view-toggle" role="group" aria-label="Affichage">
-          <button type="button" class="view-toggle__btn is-active" data-view="grid" aria-pressed="true" title="Grille"><span aria-hidden="true">▦</span></button>
-          <button type="button" class="view-toggle__btn" data-view="list" aria-pressed="false" title="Liste"><span aria-hidden="true">☰</span></button>
+          <button type="button" class="view-toggle__btn is-active" data-view="grid" aria-pressed="true" title="Grille"><span aria-hidden="true" set:html={icon('grid')}></span></button>
+          <button type="button" class="view-toggle__btn" data-view="list" aria-pressed="false" title="Liste"><span aria-hidden="true" set:html={icon('list')}></span></button>
         </div>
       </div>
 
@@ -87,7 +88,7 @@ const grouped = families
             <header class="family-header">
               <h2 class="family-name" data-fr={familyName(f, 'fr')} data-en={familyName(f, 'en')}>{familyName(f, 'fr')}</h2>
               <span class="family-count"><span class="family-count__n">{list.length}</span> <span data-i18n="products_count">produit(s)</span></span>
-              <button type="button" class="famzip-btn" data-family-zip={f.id}>⬇ <span data-i18n="datasheets_zip">Fiches (ZIP)</span></button>
+              <button type="button" class="famzip-btn" data-family-zip={f.id}><Fragment set:html={icon('download')} /> <span data-i18n="datasheets_zip">Fiches (ZIP)</span></button>
             </header>
             <div class="product-grid" data-grid>{list.map((p) => <ProductCard p={p} />)}</div>
           </section>

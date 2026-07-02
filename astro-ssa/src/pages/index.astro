@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProductCard from '../components/ProductCard.astro';
 import { products, families, site, familyById, familyName, productById } from '../lib/catalogue.js';
+import { icon } from '../lib/icons.js';
 
 const featured = productById(site.featured_product_id);
 const featFamily = featured && familyById(featured.family_id);
@@ -16,22 +17,33 @@ const featuredGrid = (site.featured_products_ids || []).map(productById).filter(
 <BaseLayout transparent={true} active="home">
   <section class="hero-dark">
     <div class="hero-dark__bg"></div>
-    <div class="hero-dark__inner">
-      <span class="hero-dark__kicker" data-i18n="hero_kicker">Édition 2026</span>
-      <h1 class="hero-dark__title" data-i18n="hero_title">L'éclairage solaire et LED qui illumine vos espaces</h1>
-      <p class="hero-dark__subtitle" data-i18n="hero_subtitle">Lampadaires solaires, éclairage public, projecteurs industriels.</p>
-      <form class="hero-search" id="hero-search" role="search" autocomplete="off">
-        <span class="hero-search__icon" aria-hidden="true">🔍</span>
-        <input type="search" id="hero-search-input" class="hero-search__input"
-               data-i18n-placeholder="search_placeholder"
-               placeholder="Rechercher un produit, un code SSA…" aria-label="Rechercher" />
-        <button type="submit" class="hero-search__btn" data-i18n="search_btn">Rechercher</button>
-        <div class="hero-search__suggestions" id="hero-search-suggestions" role="listbox" hidden></div>
-      </form>
-      <div class="hero-dark__cta">
-        <a href="/catalogue/" class="btn btn-primary btn-lg" data-i18n="hero_cta">Explorer le catalogue</a>
-        <a href="#families" class="btn btn-ghost btn-lg" data-i18n="hero_cta_secondary">Découvrir les familles</a>
+    <div class="hero-dark__grid">
+      <div class="hero-dark__inner">
+        <span class="hero-dark__kicker" data-i18n="hero_kicker">Édition 2026</span>
+        <h1 class="hero-dark__title" data-i18n="hero_title">L'éclairage solaire et LED qui illumine vos espaces</h1>
+        <p class="hero-dark__subtitle" data-i18n="hero_subtitle">Lampadaires solaires, éclairage public, projecteurs industriels.</p>
+        <form class="hero-search" id="hero-search" role="search" autocomplete="off">
+          <span class="hero-search__icon" aria-hidden="true" set:html={icon('search')}></span>
+          <input type="search" id="hero-search-input" class="hero-search__input"
+                 data-i18n-placeholder="search_placeholder"
+                 placeholder="Rechercher un produit, un code SSA…" aria-label="Rechercher" />
+          <button type="submit" class="hero-search__btn" data-i18n="search_btn">Rechercher</button>
+          <div class="hero-search__suggestions" id="hero-search-suggestions" role="listbox" hidden></div>
+        </form>
+        <div class="hero-dark__cta">
+          <a href="/catalogue/" class="btn btn-primary btn-lg" data-i18n="hero_cta">Explorer le catalogue</a>
+          <a href="#families" class="btn btn-ghost btn-lg" data-i18n="hero_cta_secondary">Découvrir les familles</a>
+        </div>
       </div>
+      {featured && (
+        <div class="hero-dark__visual" aria-hidden="true">
+          <div class="hero-dark__glow"></div>
+          <a class="hero-showcase" href={`/produit/${featured.id}/`}>
+            <img src={`/assets/images/${featured.image}`} alt={featured.name_slx} />
+            <span class="hero-showcase__tag">{featured.name_slx}</span>
+          </a>
+        </div>
+      )}
     </div>
   </section>
 
@@ -53,7 +65,7 @@ const featuredGrid = (site.featured_products_ids || []).map(productById).filter(
             <a class="btn btn-outline" download
                href={`/assets/datasheets/${featured.datasheet_fr}`}
                data-href-fr={`/assets/datasheets/${featured.datasheet_fr}`}
-               data-href-en={`/assets/datasheets/${featured.datasheet_en}`}>📄 <span data-i18n="download_datasheet">Fiche technique</span></a>
+               data-href-en={`/assets/datasheets/${featured.datasheet_en}`}><Fragment set:html={icon('file')} /> <span data-i18n="download_datasheet">Fiche technique</span></a>
           </div>
         </div>
         <div class="featured-image">
