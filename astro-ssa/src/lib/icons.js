@@ -12,6 +12,8 @@ export const ICONS = {
   download: '<path d="M12 3v12M8 11l4 4 4-4M4 20h16"/>',
   quote: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/>',
   arrowRight: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
 };
 
 // Retourne une chaîne <svg> prête à insérer. `cls` = classes CSS optionnelles.

@@ -2006,6 +2006,48 @@ body:has(#devis-bar) #compare-bar { bottom: 62px; }
 @media (max-width: 640px) {
   .devis-bar__title span:not(.icon), .compare-bar__title { font-size: 11px; }
 }
+.devis-bar__summary { color: var(--color-muted); font-size: 13px; white-space: nowrap; }
+
+/* Bouton « + » par ligne de référence (tableau des références). */
+.col-devis { width: 48px; text-align: center; }
+.ref-devis-btn {
+  width: 28px; height: 28px; display: inline-grid; place-items: center;
+  border-radius: 50%; border: 1px solid var(--color-border);
+  background: #fff; color: var(--color-primary-text); cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.ref-devis-btn .icon { width: 15px; height: 15px; }
+.ref-devis-btn:hover { border-color: var(--color-primary); background: rgba(247,166,0,0.12); }
+.ref-devis-btn.is-active-quote { background: var(--ssa-black); color: #fff; border-color: var(--ssa-black); }
+
+/* Page /devis/ */
+.devis-head-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+.devis-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; align-items: start; }
+.devis-group { background: #fff; border: 1px solid var(--color-border); border-radius: 16px; padding: 18px 20px; margin-bottom: 18px; }
+.devis-group__head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.devis-group__head img { width: 44px; height: 44px; object-fit: contain; background: #fff; }
+.devis-group__name { font-family: var(--font-title); font-size: 20px; letter-spacing: 0.02em; color: var(--color-text); }
+.devis-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.devis-table th { text-align: left; font-family: var(--font-icon); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-muted); padding: 6px 8px; border-bottom: 1px solid var(--color-border); }
+.devis-table td { padding: 8px; border-bottom: 1px solid var(--color-border); }
+.devis-code { font-weight: 700; color: var(--color-primary-text); }
+.devis-remove { border: none; background: transparent; color: var(--color-muted); font-size: 18px; line-height: 1; cursor: pointer; }
+.devis-remove:hover { color: #d11; }
+.devis-side { position: sticky; top: 90px; }
+.devis-form { background: #fff; border: 1px solid var(--color-border); border-radius: 16px; padding: 22px; }
+.devis-form__title { font-size: 18px; margin-bottom: 14px; }
+.devis-form__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.devis-form label { display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: 600; color: var(--color-text-soft); }
+.devis-form input, .devis-form textarea { padding: 9px 11px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; }
+.devis-form input:focus, .devis-form textarea:focus { outline: 2px solid var(--color-primary); outline-offset: 1px; border-color: var(--color-primary); }
+.devis-form__msg { margin: 12px 0 16px; }
+.devis-form .btn { width: 100%; }
+.devis-form__note { font-size: 12px; color: var(--color-muted); margin-top: 10px; text-align: center; }
+@media (max-width: 860px) {
+  .devis-layout { grid-template-columns: 1fr; }
+  .devis-side { position: static; }
+  .devis-form__grid { grid-template-columns: 1fr; }
+}
 
 /* Compare page */
 .compare-head-row {

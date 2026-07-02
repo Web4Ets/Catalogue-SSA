@@ -1,0 +1,119 @@
+// Page /devis/ : liste les références ajoutées (depuis localStorage), permet de
+// retirer, saisir ses coordonnées, et envoyer la demande par email (mailto).
+import './common.js';
+import './devis.js';
+
+const t = (k) => window.SSA.t(k);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+async function render() {
+  const container = document.getElementById('devis-container');
+  if (!container) return;
+  const DATA = await window.SSA.loadData();
+  const lang = window.SSA.lang;
+  const items = window.SSA_devis.getItems();
+  const heading = `<h1 class="section-title">${t('quote_bar_title')}</h1>`;
+
+  if (!items.length) {
+    container.innerHTML = `${heading}<div class="empty-state"><p>${t('quote_empty')}</p>
+      <p style="margin-top:16px;"><a class="btn btn-primary" href="/catalogue/">${t('catalogue')}</a></p></div>`;
+    return;
+  }
+
+  // Regroupe les références par produit, en récupérant le détail du variant.
+  const byProduct = new Map();
+  for (const it of items) {
+    const p = DATA.products.find((x) => x.id === it.id);
+    if (!p) continue;
+    const v = p.variants.find((x) => x.code_slx === it.code);
+    if (!v) continue;
+    if (!byProduct.has(p.id)) byProduct.set(p.id, { p, rows: [] });
+    byProduct.get(p.id).rows.push(v);
+  }
+
+  const th = (c) => (DATA.i18n[lang].table_headers || {})[c] || c;
+  const groups = [...byProduct.values()].map(({ p, rows }) => `
+    <div class="devis-group">
+      <div class="devis-group__head">
+        <img src="/assets/images/${p.image}" alt="" loading="lazy" />
+        <a href="/produit/${p.id}/" class="devis-group__name">${esc(p.name_slx)}</a>
+      </div>
+      <table class="devis-table">
+        <thead><tr><th>${th('code_slx')}</th><th>${th('designation')}</th><th>${th('power')}</th><th>${th('lumen')}</th><th></th></tr></thead>
+        <tbody>
+          ${rows.map((v) => `<tr>
+            <td class="devis-code">${esc(v.code_slx)}</td>
+            <td>${esc(v.designation || '')}</td>
+            <td>${esc(v.power || '')}</td>
+            <td>${esc(v.lumen || '')}</td>
+            <td><button type="button" class="devis-remove" data-remove-code="${esc(v.code_slx)}" aria-label="${t('remove')}">×</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`).join('');
+
+  const form = `
+    <form class="devis-form" id="devis-form">
+      <h2 class="devis-form__title">${lang === 'en' ? 'Your details' : 'Vos coordonnées'}</h2>
+      <div class="devis-form__grid">
+        <label>${lang === 'en' ? 'Name' : 'Nom'} <input type="text" name="name" required /></label>
+        <label>${lang === 'en' ? 'Company' : 'Société'} <input type="text" name="company" /></label>
+        <label>${lang === 'en' ? 'Email' : 'Email'} <input type="email" name="email" required /></label>
+        <label>${lang === 'en' ? 'Phone' : 'Téléphone'} <input type="tel" name="phone" /></label>
+      </div>
+      <label class="devis-form__msg">${lang === 'en' ? 'Message' : 'Message'} <textarea name="message" rows="3"></textarea></label>
+      <button type="submit" class="btn btn-primary btn-lg">${t('request_quote')} (${items.length})</button>
+      <p class="devis-form__note">${lang === 'en' ? 'Opens your email app with the request pre-filled.' : 'Ouvre votre messagerie avec la demande pré-remplie.'}</p>
+    </form>`;
+
+  container.innerHTML = `
+    <div class="devis-head-row">${heading}
+      <button type="button" class="btn btn-outline btn-sm" id="devis-clear-all">${t('quote_clear')}</button>
+    </div>
+    <div class="devis-layout">
+      <div class="devis-list">${groups}</div>
+      <div class="devis-side">${form}</div>
+    </div>`;
+}
+
+function buildMailto(fields) {
+  const DATA = window.__DATA_CACHE__;
+  const lang = window.SSA.lang;
+  const items = window.SSA_devis.getItems();
+  const subj = lang === 'en' ? `Quote request — ${items.length} reference(s)` : `Demande de devis — ${items.length} référence(s)`;
+  const lines = items.map((it) => {
+    const p = (DATA.products || []).find((x) => x.id === it.id);
+    return `- ${p ? p.name_slx : ''} · ${it.code}`;
+  });
+  const intro = lang === 'en' ? 'Hello,\n\nI would like a quote for the following references:\n' : 'Bonjour,\n\nJe souhaite un devis pour les références suivantes :\n';
+  const coord = [
+    fields.name && `${lang === 'en' ? 'Name' : 'Nom'}: ${fields.name}`,
+    fields.company && `${lang === 'en' ? 'Company' : 'Société'}: ${fields.company}`,
+    fields.email && `Email: ${fields.email}`,
+    fields.phone && `${lang === 'en' ? 'Phone' : 'Téléphone'}: ${fields.phone}`,
+  ].filter(Boolean).join('\n');
+  const msg = fields.message ? `\n\n${fields.message}` : '';
+  const body = intro + lines.join('\n') + '\n\n' + coord + msg + (lang === 'en' ? '\n\nThank you.' : '\n\nMerci.');
+  return `mailto:ssa@ssa.green?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+}
+
+document.addEventListener('click', (e) => {
+  const rem = e.target.closest('[data-remove-code]');
+  if (rem) {
+    const code = rem.dataset.removeCode;
+    const it = window.SSA_devis.getItems().find((x) => x.code === code);
+    if (it) window.SSA_devis.toggleRef(it.id, code);
+    render();
+  }
+  if (e.target.closest('#devis-clear-all')) { window.SSA_devis.clearQuote(); render(); }
+});
+document.addEventListener('submit', (e) => {
+  if (e.target.id !== 'devis-form') return;
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const fields = Object.fromEntries(fd.entries());
+  location.href = buildMailto(fields);
+});
+window.SSA.loadData().then((d) => { window.__DATA_CACHE__ = d; });
+window.SSA.onLangChange(render);
+render();

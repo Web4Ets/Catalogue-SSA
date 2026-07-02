@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Demande de devis — SSA" description="Votre demande de devis SSA : références sélectionnées et envoi de la demande." active="catalogue">
+  <main class="section devis-page">
+    <div class="section-inner">
+      <div id="devis-container"></div>
+    </div>
+  </main>
+  <script>
+    import '../scripts/devis-page.js';
+  </script>
+</BaseLayout>

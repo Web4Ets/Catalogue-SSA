@@ -141,12 +141,19 @@ const mailto = (lang) => {
             <table class="variants-table variants-table--modern">
               <thead><tr>
                 {cols.map((c) => (<th class={`col-${c.replace(/_/g, '-')}`} data-fr={th(c).fr} data-en={th(c).en}>{th(c).fr}</th>))}
+                <th class="col-devis" data-i18n="add_to_quote">Devis</th>
               </tr></thead>
               <tbody>
                 {p.variants.map((v) => (
-                  <tr>{cols.map((c) => (
-                    <td class={`col-${c.replace(/_/g, '-')}`} set:html={String(v[c] ?? '').replace(/;\s*/g, '<br>')}></td>
-                  ))}</tr>
+                  <tr>
+                    {cols.map((c) => (
+                      <td class={`col-${c.replace(/_/g, '-')}`} set:html={String(v[c] ?? '').replace(/;\s*/g, '<br>')}></td>
+                    ))}
+                    <td class="col-devis">
+                      <button type="button" class="ref-devis-btn" data-devis-ref={`${p.id}|${v.code_slx}`}
+                              aria-label="Ajouter au devis" set:html={icon('plus')}></button>
+                    </td>
+                  </tr>
                 ))}
               </tbody>
             </table>
