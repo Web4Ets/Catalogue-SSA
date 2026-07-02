@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { products } from '../lib/catalogue.js';
+---
+<BaseLayout transparent={true} active="home">
+  <section class="section">
+    <div class="section-inner">
+      <h1 class="section-title">Scaffold OK — {products.length} produits</h1>
+    </div>
+  </section>
+</BaseLayout>

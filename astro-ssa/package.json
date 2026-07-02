@@ -1,0 +1,19 @@
+{
+  "name": "ssa-catalogue",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "sync": "node scripts/sync-assets.mjs",
+    "dev": "astro dev",
+    "build": "npm run sync && astro build",
+    "preview": "astro preview",
+    "deploy": "node scripts/deploy-ftp.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.6.0"
+  },
+  "devDependencies": {
+    "basic-ftp": "^5.0.5"
+  }
+}

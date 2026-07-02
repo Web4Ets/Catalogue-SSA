@@ -1,0 +1,75 @@
+---
+import { i18n } from '../lib/catalogue.js';
+
+const {
+  title = 'SSA Catalogue — Éclairage Solaire & LED',
+  description = 'Catalogue SSA — Solutions Solaires Adaptées : lampadaires solaires, éclairage public et projecteurs industriels LED.',
+  active = '',
+  transparent = false,
+  image = '/assets/brand/ssa-logo.png',
+} = Astro.props;
+
+const headerClass = transparent ? 'site-header site-header--transparent' : 'site-header';
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content={new URL(image, Astro.site).href} />
+  <link rel="icon" type="image/png" href="/assets/brand/ssa-logo-sm.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <script is:inline set:html={`window.__I18N__=${JSON.stringify(i18n)};try{var l=localStorage.getItem('ssa-lang');if(l==='en'){document.documentElement.lang='en';}}catch(e){}`}></script>
+</head>
+<body class={transparent ? 'page-home' : ''}>
+  <header class={headerClass} id="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo" aria-label="SSA Catalogue">
+        <img src="/assets/brand/ssa-logo-sm.png" alt="SSA" class="logo-img logo-img--light" />
+        <img src="/assets/brand/ssa-logo-white-sm.png" alt="SSA" class="logo-img logo-img--dark" />
+      </a>
+      <nav class="nav">
+        <a href="/" class={active === 'home' ? 'active' : ''} data-i18n="home">Accueil</a>
+        <a href="/catalogue/" class={active === 'catalogue' ? 'active' : ''} data-i18n="catalogue">Catalogue</a>
+      </nav>
+      <div class={transparent ? 'lang-switch lang-switch--dark' : 'lang-switch'} role="tablist" aria-label="Language">
+        <button data-lang="fr" type="button">FR</button>
+        <button data-lang="en" type="button">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <slot />
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="/" class="logo">
+          <img src="/assets/brand/ssa-logo-white-sm.png" alt="SSA" class="logo-img" />
+        </a>
+        <span class="footer-tagline">Solutions Solaires Adaptées</span>
+      </div>
+      <div class="footer-contact">
+        <a href="mailto:ssa@ssa.green">ssa@ssa.green</a><span class="dot"></span>
+        <span>04 84 85 60 32</span><span class="dot"></span>
+        <span>118 rue Anthonin Bonnaud, 84120 Pertuis</span>
+      </div>
+      <div class="footer-copy">SSA — Solutions Solaires Adaptées · © 2026 — Tous droits réservés</div>
+    </div>
+  </footer>
+
+  <script>
+    import '../scripts/common.js';
+  </script>
+</body>
+</html>

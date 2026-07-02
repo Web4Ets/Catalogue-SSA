@@ -1,0 +1,16 @@
+# dépendances & build
+node_modules/
+dist/
+.astro/
+
+# assets synchronisés depuis la racine (régénérés par `npm run sync`)
+public/assets/
+public/style.css
+src/data/products.json
+
+# identifiants FTP IONOS — JAMAIS commités
+.env
+
+# divers
+.DS_Store
+*.log
