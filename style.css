@@ -224,6 +224,10 @@ img { max-width: 100%; display: block; }
   position: relative; z-index: 1;
   text-align: left;
 }
+/* Desktop 2 colonnes : tout le contenu du hero aligné à GAUCHE (cohérent). */
+.hero-dark__grid .hero-dark__subtitle { margin-left: 0; margin-right: 0; max-width: 520px; }
+.hero-dark__grid .hero-search { margin-left: 0; margin-right: 0; max-width: 560px; }
+.hero-dark__grid .hero-dark__cta { justify-content: flex-start; }
 .hero-dark__visual { position: relative; display: grid; place-items: center; }
 .hero-dark__glow {
   position: absolute; width: 78%; aspect-ratio: 1;
@@ -247,6 +251,9 @@ img { max-width: 100%; display: block; }
 @media (max-width: 900px) {
   .hero-dark__grid { grid-template-columns: 1fr; gap: 32px; }
   .hero-dark__inner { text-align: center; max-width: 620px; margin: 0 auto; }
+  .hero-dark__grid .hero-dark__subtitle,
+  .hero-dark__grid .hero-search { margin-left: auto; margin-right: auto; }
+  .hero-dark__grid .hero-dark__cta { justify-content: center; }
   .hero-dark__visual { display: none; }
 }
 .hero-dark__kicker {
