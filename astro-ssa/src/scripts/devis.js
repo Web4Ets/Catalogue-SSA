@@ -36,14 +36,18 @@ function buildMailto() {
   return `mailto:ssa@ssa.green?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
-// Boutons « Ajouter au devis » (fiche produit + cartes le cas échéant).
+// Boutons « Ajouter au devis » : version pleine (fiche) et compacte (cartes, icône seule).
 function syncButtons() {
   document.querySelectorAll('[data-devis-id]').forEach((btn) => {
     const on = inQuote(btn.dataset.devisId);
     btn.classList.toggle('is-active-quote', on);
-    const label = on ? t('in_quote') : t('add_to_quote');
-    const iconEl = btn.querySelector('.icon');
-    btn.innerHTML = window.SSA.icon(on ? 'check' : 'quote') + ' <span>' + label + '</span>';
+    if (btn.hasAttribute('data-devis-compact')) {
+      btn.setAttribute('aria-pressed', String(on));
+      btn.title = on ? t('in_quote') : t('add_to_quote');
+      btn.innerHTML = window.SSA.icon(on ? 'check' : 'quote');
+    } else {
+      btn.innerHTML = window.SSA.icon(on ? 'check' : 'quote') + ' <span>' + (on ? t('in_quote') : t('add_to_quote')) + '</span>';
+    }
   });
 }
 

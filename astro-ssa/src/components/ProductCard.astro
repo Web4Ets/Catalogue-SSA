@@ -24,8 +24,12 @@ const pmax = watts.length ? Math.max(...watts) : '';
    data-pmax={pmax}
    data-watts={watts.join(' ')}
    data-haystack={haystack(p, 'fr') + ' ' + haystack(p, 'en')}>
-  <span class="compare-toggle" role="button" tabindex="0" data-compare-id={p.id}
-        aria-pressed="false" aria-label="Comparer" set:html={icon('compare')}></span>
+  <div class="card-actions">
+    <span class="card-toggle devis-toggle" role="button" tabindex="0" data-devis-id={p.id} data-devis-compact
+          aria-pressed="false" aria-label="Ajouter au devis" set:html={icon('quote')}></span>
+    <span class="card-toggle compare-toggle" role="button" tabindex="0" data-compare-id={p.id}
+          aria-pressed="false" aria-label="Comparer" set:html={icon('compare')}></span>
+  </div>
   <div class="product-image">
     <img src={`/assets/images/${p.image}`} alt={p.name_slx} loading="lazy"
          data-fallback-code={p.code_prefix}

@@ -1901,31 +1901,29 @@ img { max-width: 100%; display: block; }
 /* ============================ COMPARE ============================== */
 /* Toggle overlaid on each product card (top-right) */
 .product-card { position: relative; }
-.compare-toggle {
-  position: absolute;
-  top: 10px; right: 10px;
-  z-index: 2;
+/* Actions de carte (devis + comparateur) empilées en haut à droite. */
+.card-actions {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.card-toggle {
   width: 30px; height: 30px;
   display: grid; place-items: center;
   border-radius: 50%;
   background: rgba(255,255,255,0.92);
   border: 1px solid var(--color-border);
   color: var(--color-muted);
-  font-size: 15px;
-  line-height: 1;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
-.compare-toggle:hover { color: var(--color-primary-text); border-color: var(--color-primary); transform: translateY(-1px); }
-.compare-toggle.is-active {
-  background: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
-}
-.compare-toggle:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
-/* In list view, dock it inline at the right edge instead of floating */
-.product-grid--list .compare-toggle { top: 50%; transform: translateY(-50%); right: 52px; }
+.card-toggle .icon { width: 16px; height: 16px; }
+.card-toggle:hover { color: var(--color-primary-text); border-color: var(--color-primary); transform: translateY(-1px); }
+.card-toggle:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.compare-toggle.is-active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+.devis-toggle.is-active-quote { background: var(--ssa-black); color: #fff; border-color: var(--ssa-black); }
+/* Vue liste : les boutons se placent en ligne au bord droit. */
+.product-grid--list .card-actions { top: 50%; transform: translateY(-50%); right: 52px; flex-direction: row; }
 
 /* Floating compare bar */
 .compare-bar {
@@ -2097,9 +2095,9 @@ body:has(#devis-bar) #compare-bar { bottom: 62px; }
 
 /* ---------- PRINT (product datasheet) ---------- */
 @media print {
-  .site-header, .site-footer, #back-to-top, .compare-bar,
+  .site-header, .site-footer, #back-to-top, .compare-bar, .devis-bar,
   .download-buttons, .breadcrumb, .related-section, .recent-section,
-  .product-card__arrow, .compare-toggle { display: none !important; }
+  .product-card__arrow, .card-actions { display: none !important; }
   body { background: #fff !important; color: #000; }
   .product-page { padding: 0; }
   .product-detail { box-shadow: none !important; border: none !important; border-radius: 0; }
