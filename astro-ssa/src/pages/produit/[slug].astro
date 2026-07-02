@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { products, familyById, familyName, tableColumns, APP_ICONS, i18n } from '../../lib/catalogue.js';
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { slug: p.id }, props: { p } }));
+}
+const { p } = Astro.props;
+const fam = familyById(p.family_id);
+const th = (col) => ({ fr: (i18n.fr.table_headers || {})[col] || col, en: (i18n.en.table_headers || {})[col] || col });
+const tl = (k) => ({ fr: (i18n.fr.tech_labels || {})[k] || k, en: (i18n.en.tech_labels || {})[k] || k });
+const al = (k) => ({ fr: (i18n.fr.app_labels || {})[k] || k, en: (i18n.en.app_labels || {})[k] || k });
+
+const gallery = (Array.isArray(p.gallery) && p.gallery.length) ? p.gallery : [p.image];
+const cols = tableColumns(p);
+const specs = p.tech_specs || [];
+const apps = p.applications || [];
+const related = products.filter((x) => x.family_id === p.family_id && x.id !== p.id).slice(0, 6);
+const siblings = products.filter((x) => x.family_id === p.family_id);
+const sIdx = siblings.findIndex((x) => x.id === p.id);
+const prev = siblings[(sIdx - 1 + siblings.length) % siblings.length];
+const next = siblings[(sIdx + 1) % siblings.length];
+
+const title = `${p.name_slx} — SSA`;
+const desc = p.description_fr.slice(0, 160);
+---
+<BaseLayout title={title} description={desc} active="catalogue" image={`/assets/images/${p.image}`}>
+  <main class="product-page">
+    <div id="product-container">
+      <div class="breadcrumb">
+        <a href="/" data-i18n="home">Accueil</a> &nbsp;›&nbsp;
+        <a href="/catalogue/" data-i18n="catalogue">Catalogue</a> &nbsp;›&nbsp;
+        <a href={`/catalogue/?family=${p.family_id}`} data-fr={familyName(fam, 'fr')} data-en={familyName(fam, 'en')}>{familyName(fam, 'fr')}</a> &nbsp;›&nbsp;
+        <span>{p.name_slx}</span>
+      </div>
+
+      <div class="product-detail product-detail--v2">
+        <header class="product-head">
+          <div class="product-head__main">
+            <span class="product-kicker" data-fr={familyName(fam, 'fr')} data-en={familyName(fam, 'en')}>{familyName(fam, 'fr')}</span>
+            <h1 class="product-title">{p.name_slx}</h1>
+            <span class="product-accent"></span>
+          </div>
+          {siblings.length > 1 && (
+            <nav class="product-nav">
+              <a class="product-nav__btn" href={`/produit/${prev.id}/`} title={prev.name_slx} data-nav="prev">‹</a>
+              <span class="product-nav__count">{sIdx + 1} / {siblings.length}</span>
+              <a class="product-nav__btn" href={`/produit/${next.id}/`} title={next.name_slx} data-nav="next">›</a>
+            </nav>
+          )}
+        </header>
+
+        {gallery.length <= 1 ? (
+          <div class="product-figure product-figure--solo">
+            <div class="product-figure__main">
+              <img class="product-figure__img is-zoomable" src={`/assets/images/${gallery[0]}`} alt={p.name_slx}
+                   data-fallback-code={p.code_prefix} data-fallback-label={familyName(fam, 'fr')} />
+            </div>
+          </div>
+        ) : (
+          <div class="product-figure product-figure--stack">
+            <div class="product-figure__main">
+              <img class="product-figure__img is-zoomable" src={`/assets/images/${gallery[0]}`} alt={p.name_slx}
+                   data-fallback-code={p.code_prefix} data-fallback-label={familyName(fam, 'fr')} />
+            </div>
+            <div class="product-figure__thumbs">
+              {gallery.map((f, i) => (
+                <button type="button" class={`pf-thumb${i === 0 ? ' is-active' : ''}`} data-full={`/assets/images/${f}`} aria-label={`${p.name_slx} — ${i + 1}/${gallery.length}`}>
+                  <img src={`/assets/images/${f}`} alt="" loading="lazy" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div class="product-body">
+          <span class="section-kicker" data-i18n="description">Description</span>
+          <p class="description" data-fr={p.description_fr} data-en={p.description_en}>{p.description_fr}</p>
+          <div class="features">
+            {(p.features_fr || []).map((f, i) => (
+              <span class="feature-chip" data-fr={f} data-en={(p.features_en || [])[i] || f}>{f}</span>
+            ))}
+          </div>
+          <div class="download-buttons">
+            <a class="btn-download" download
+               href={`/assets/datasheets/${p.datasheet_fr}`}
+               data-href-fr={`/assets/datasheets/${p.datasheet_fr}`}
+               data-href-en={`/assets/datasheets/${p.datasheet_en}`}>📄 <span data-i18n="download_datasheet">Fiche technique</span></a>
+            <button type="button" class="btn-download csv" id="csv-export-btn">📊 <span data-i18n="export_csv">Exporter CSV</span></button>
+            <button type="button" class="btn-download alt" id="compare-product-btn" data-compare-id={p.id}></button>
+          </div>
+        </div>
+
+        {apps.length > 0 && (
+          <div class="product-applications">
+            <span class="section-kicker" data-i18n="applications_title">Applications recommandées</span>
+            <div class="applications-grid">
+              {apps.map((k) => (
+                <div class="app-tile">
+                  <span class="app-tile__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" set:html={APP_ICONS[k] || ''}></svg></span>
+                  <span class="app-tile__label" data-fr={al(k).fr} data-en={al(k).en}>{al(k).fr}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {specs.length > 0 && (
+          <div class="product-specs-block">
+            <span class="section-kicker" data-i18n="technical_specs">Caractéristiques techniques</span>
+            <dl class="spec-grid">
+              {specs.map((s) => (
+                <div class="spec-row">
+                  <dt data-fr={tl(s.k).fr} data-en={tl(s.k).en}>{tl(s.k).fr}</dt>
+                  <dd data-fr={s.fr} data-en={s.en}>{s.fr}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )}
+
+        <div class="product-detail-bottom">
+          <span class="section-kicker" data-i18n="references">Références</span>
+          <div class="variants-table-wrap">
+            <table class="variants-table variants-table--modern">
+              <thead><tr>
+                {cols.map((c) => (<th class={`col-${c.replace(/_/g, '-')}`} data-fr={th(c).fr} data-en={th(c).en}>{th(c).fr}</th>))}
+              </tr></thead>
+              <tbody>
+                {p.variants.map((v) => (
+                  <tr>{cols.map((c) => (
+                    <td class={`col-${c.replace(/_/g, '-')}`} set:html={String(v[c] ?? '').replace(/;\s*/g, '<br>')}></td>
+                  ))}</tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {related.length > 0 && (
+        <section class="related-section">
+          <div class="related-head">
+            <h2 class="related-title" data-i18n="related_products">Produits de la même famille</h2>
+            <a href={`/catalogue/?family=${p.family_id}`} class="related-link"><span data-fr={familyName(fam, 'fr')} data-en={familyName(fam, 'en')}>{familyName(fam, 'fr')}</span> →</a>
+          </div>
+          <div class="product-grid">{related.map((rp) => <ProductCard p={rp} />)}</div>
+        </section>
+      )}
+    </div>
+  </main>
+
+  <script>
+    import '../../scripts/product.js';
+  </script>
+</BaseLayout>
