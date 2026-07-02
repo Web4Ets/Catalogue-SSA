@@ -2,6 +2,7 @@
 // actifs supprimables, compteur sticky, famnav, ZIP fiches par famille.
 import './common.js';
 import './compare.js';
+import './devis.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));

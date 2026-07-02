@@ -95,9 +95,9 @@ const mailto = (lang) => {
             ))}
           </div>
           <div class="download-buttons">
-            <a class="btn-download btn-download--quote" href={mailto('fr')} data-href-fr={mailto('fr')} data-href-en={mailto('en')}>
-              <Fragment set:html={icon('quote')} /> <span data-fr="Demander un devis" data-en="Request a quote">Demander un devis</span>
-            </a>
+            <button type="button" class="btn-download btn-download--quote" data-devis-id={p.id}>
+              <Fragment set:html={icon('quote')} /> <span data-i18n="add_to_quote">Ajouter au devis</span>
+            </button>
             <a class="btn-download alt" download
                href={`/assets/datasheets/${p.datasheet_fr}`}
                data-href-fr={`/assets/datasheets/${p.datasheet_fr}`}

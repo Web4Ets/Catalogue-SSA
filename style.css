@@ -1982,6 +1982,33 @@ img { max-width: 100%; display: block; }
 .compare-bar__remove:hover { color: #d11; }
 .compare-bar__actions { display: flex; gap: 8px; flex-shrink: 0; }
 
+/* Barre de devis — calquée sur le comparateur, accent orange (action métier). */
+.devis-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 91;
+  background: rgba(255,255,255,0.98);
+  border-top: 2px solid var(--color-primary);
+  box-shadow: 0 -8px 24px rgba(29,29,27,0.14);
+  backdrop-filter: blur(8px);
+  animation: compareBarIn 0.2s ease;
+}
+.devis-bar__inner { max-width: var(--max-w); margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 16px; }
+.devis-bar__title { font-family: var(--font-icon); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-primary-text); white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.devis-bar__items { display: flex; gap: 8px; flex: 1; min-width: 0; overflow-x: auto; padding-bottom: 2px; }
+.devis-bar__chip { display: inline-flex; align-items: center; gap: 8px; padding: 5px 8px 5px 5px; border: 1px solid var(--color-border); border-radius: 999px; background: #fff; white-space: nowrap; flex-shrink: 0; }
+.devis-bar__chip img { width: 28px; height: 28px; object-fit: contain; background: var(--color-bg); border-radius: 50%; padding: 2px; }
+.devis-bar__chip-name { font-size: 13px; font-weight: 600; }
+.devis-bar__remove { border: none; background: transparent; color: var(--color-muted); font-size: 18px; line-height: 1; cursor: pointer; padding: 0 2px; }
+.devis-bar__remove:hover { color: #d11; }
+.devis-bar__actions { display: flex; gap: 8px; flex-shrink: 0; }
+/* Quand les deux barres coexistent, le comparateur remonte au-dessus du devis. */
+body:has(#devis-bar) #compare-bar { bottom: 62px; }
+/* État actif du bouton « Ajouter au devis ». */
+.btn-download--quote.is-active-quote { background: var(--ssa-black); color: #fff; border-color: var(--ssa-black); box-shadow: none; }
+.btn-download--quote.is-active-quote:hover { background: #000; color: #fff; }
+@media (max-width: 640px) {
+  .devis-bar__title span:not(.icon), .compare-bar__title { font-size: 11px; }
+}
+
 /* Compare page */
 .compare-head-row {
   display: flex; align-items: center; justify-content: space-between;

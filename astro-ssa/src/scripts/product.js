@@ -2,6 +2,7 @@
 // sur l'image principale seule, bouton comparateur, export CSV.
 import './common.js';
 import './compare.js';
+import './devis.js';
 
 // ── Galerie : clic miniature = remplace l'image principale (pas de lightbox) ──
 function initFigureThumbs() {
