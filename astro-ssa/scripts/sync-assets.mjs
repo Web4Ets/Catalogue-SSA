@@ -29,7 +29,8 @@ function copyFile(src, dst) {
   copyFileSync(src, dst);
 }
 
-// 1) données
+// 1) données pour le build (src/data). La copie client (public/assets) se fait
+// APRÈS le nettoyage de public/assets plus bas (sinon elle serait effacée).
 copyFile(join(ROOT, 'data', 'products.json'), join(ASTRO, 'src', 'data', 'products.json'));
 // 2) CSS global
 copyFile(join(ROOT, 'style.css'), join(ASTRO, 'public', 'style.css'));
@@ -52,5 +53,8 @@ const dN = copyDir(join(ROOT, 'assets', 'datasheets'), join(pubAssets, 'datashee
 const bN = copyDir(join(ROOT, 'assets', 'brand'), join(pubAssets, 'brand'));
 const fN = copyDir(join(ROOT, 'assets', 'fonts'), join(pubAssets, 'fonts'));
 const vN = copyDir(join(ROOT, 'assets', 'vendor'), join(pubAssets, 'vendor'));
+
+// products.json pour le client (fetch) — après le nettoyage de public/assets
+copyFile(join(ROOT, 'data', 'products.json'), join(pubAssets, 'products.json'));
 
 console.log(`sync OK — images:${imgN} datasheets:${dN} brand:${bN} fonts:${fN} vendor:${vN}`);

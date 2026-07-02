@@ -105,10 +105,19 @@ initLang();
 initHeaderScroll();
 initBackToTop();
 
+// Charge products.json une seule fois (mémoïsé) — pour recherche hero & comparateur.
+let _dataPromise = null;
+function loadData() {
+  if (!_dataPromise) _dataPromise = fetch('/assets/products.json').then((r) => r.json());
+  return _dataPromise;
+}
+
 window.SSA = {
   t,
   get lang() { return STATE.lang; },
   openLightbox,
   closeLightbox,
+  loadData,
+  applyI18n,
   onLangChange(cb) { document.addEventListener('ssa:langchange', (e) => cb(e.detail.lang)); },
 };

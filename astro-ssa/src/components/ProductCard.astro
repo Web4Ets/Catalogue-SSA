@@ -1,0 +1,41 @@
+---
+import { familyById, familyName, productWattRange, ipRating, haystack, parseWatts } from '../lib/catalogue.js';
+const { p } = Astro.props;
+const family = familyById(p.family_id);
+const watt = productWattRange(p);
+const ip = ipRating(p);
+const feats = p.features_fr || [];
+const ips = feats.filter((f) => /^IP\d+K?$/i.test(f));
+const iks = feats.filter((f) => /^IK\d+$/i.test(f));
+const watts = (p.variants || []).map((v) => parseWatts(v.power)).filter((w) => w !== null);
+const pmin = watts.length ? Math.min(...watts) : '';
+const pmax = watts.length ? Math.max(...watts) : '';
+// data-* consommés par le filtrage catalogue (show/hide sur DOM pré-rendu)
+---
+<a class="product-card" href={`/produit/${p.id}/`}
+   data-id={p.id}
+   data-family={p.family_id}
+   data-ip={ips.join(' ')}
+   data-ik={iks.join(' ')}
+   data-feats={feats.join('|')}
+   data-apps={(p.applications || []).join(' ')}
+   data-pmin={pmin}
+   data-pmax={pmax}
+   data-haystack={haystack(p, 'fr') + ' ' + haystack(p, 'en')}>
+  <span class="compare-toggle" role="button" tabindex="0" data-compare-id={p.id}
+        aria-pressed="false" aria-label="Comparer">⇄</span>
+  <div class="product-image">
+    <img src={`/assets/images/${p.image}`} alt={p.name_slx} loading="lazy"
+         data-fallback-code={p.code_prefix}
+         data-fallback-label={familyName(family, 'fr')} />
+  </div>
+  <div class="product-body">
+    <div class="product-name">{p.name_slx}</div>
+    <div class="product-card__meta">
+      <span class="product-card__family" data-fr={familyName(family, 'fr')} data-en={familyName(family, 'en')}>{familyName(family, 'fr')}</span>
+      {watt && <span class="product-card__spec">{watt}</span>}
+      {ip && <span class="product-card__spec">{ip}</span>}
+    </div>
+  </div>
+  <span class="product-card__arrow" aria-hidden="true">→</span>
+</a>

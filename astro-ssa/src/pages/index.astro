@@ -1,11 +1,119 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { products } from '../lib/catalogue.js';
+import ProductCard from '../components/ProductCard.astro';
+import { products, families, site, familyById, familyName, productById } from '../lib/catalogue.js';
+
+const featured = productById(site.featured_product_id);
+const featFamily = featured && familyById(featured.family_id);
+const shortFr = featured ? (featured.description_fr.length > 280 ? featured.description_fr.slice(0, 280).replace(/\s+\S*$/, '') + '…' : featured.description_fr) : '';
+const shortEn = featured ? (featured.description_en.length > 280 ? featured.description_en.slice(0, 280).replace(/\s+\S*$/, '') + '…' : featured.description_en) : '';
+const featChipsFr = featured ? featured.features_fr.slice(0, 6) : [];
+const featChipsEn = featured ? featured.features_en.slice(0, 6) : [];
+
+const countByFamily = (id) => products.filter((p) => p.family_id === id).length;
+const featuredGrid = (site.featured_products_ids || []).map(productById).filter(Boolean);
 ---
 <BaseLayout transparent={true} active="home">
-  <section class="section">
-    <div class="section-inner">
-      <h1 class="section-title">Scaffold OK — {products.length} produits</h1>
+  <section class="hero-dark">
+    <div class="hero-dark__bg"></div>
+    <div class="hero-dark__inner">
+      <span class="hero-dark__kicker" data-i18n="hero_kicker">Édition 2026</span>
+      <h1 class="hero-dark__title" data-i18n="hero_title">L'éclairage solaire et LED qui illumine vos espaces</h1>
+      <p class="hero-dark__subtitle" data-i18n="hero_subtitle">Lampadaires solaires, éclairage public, projecteurs industriels.</p>
+      <form class="hero-search" id="hero-search" role="search" autocomplete="off">
+        <span class="hero-search__icon" aria-hidden="true">🔍</span>
+        <input type="search" id="hero-search-input" class="hero-search__input"
+               data-i18n-placeholder="search_placeholder"
+               placeholder="Rechercher un produit, un code SSA…" aria-label="Rechercher" />
+        <button type="submit" class="hero-search__btn" data-i18n="search_btn">Rechercher</button>
+        <div class="hero-search__suggestions" id="hero-search-suggestions" role="listbox" hidden></div>
+      </form>
+      <div class="hero-dark__cta">
+        <a href="/catalogue/" class="btn btn-primary btn-lg" data-i18n="hero_cta">Explorer le catalogue</a>
+        <a href="#families" class="btn btn-ghost btn-lg" data-i18n="hero_cta_secondary">Découvrir les familles</a>
+      </div>
     </div>
   </section>
+
+  {featured && (
+    <section class="featured-section">
+      <div class="featured-inner" id="featured-product">
+        <div class="featured-text">
+          <span class="featured-kicker" data-i18n="featured_label">Produit vedette</span>
+          <h2 class="featured-name">{featured.name_slx}</h2>
+          <div class="featured-family" data-fr={familyName(featFamily, 'fr')} data-en={familyName(featFamily, 'en')}>{familyName(featFamily, 'fr')}</div>
+          <p class="featured-desc" data-fr={shortFr} data-en={shortEn}>{shortFr}</p>
+          <div class="featured-features">
+            {featChipsFr.map((f, i) => (
+              <span class="feature-chip" data-fr={f} data-en={featChipsEn[i] || f}>{f}</span>
+            ))}
+          </div>
+          <div class="featured-cta">
+            <a href={`/produit/${featured.id}/`} class="btn btn-primary"><span data-i18n="featured_cta">Voir le produit</span> →</a>
+            <a class="btn btn-outline" download
+               href={`/assets/datasheets/${featured.datasheet_fr}`}
+               data-href-fr={`/assets/datasheets/${featured.datasheet_fr}`}
+               data-href-en={`/assets/datasheets/${featured.datasheet_en}`}>📄 <span data-i18n="download_datasheet">Fiche technique</span></a>
+          </div>
+        </div>
+        <div class="featured-image">
+          <img src={`/assets/images/${featured.image}`} alt={featured.name_slx}
+               data-fallback-code={featured.code_prefix}
+               data-fallback-label={familyName(featFamily, 'fr')} />
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section browse-section" id="families">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-kicker" data-i18n="browse_intro">Parcourir le catalogue</span>
+        <h2 class="section-title section-title--big" data-i18n="browse_by_family">Par famille</h2>
+      </div>
+      <div class="family-rich-grid" id="families-grid">
+        {families.map((f) => (
+          <a class="family-rich-card" href={`/catalogue/?family=${f.id}`}>
+            <div class="family-rich-card__media">
+              <img src={`/assets/images/${f.image}`} alt={familyName(f, 'fr')} loading="lazy"
+                   data-fallback-code={f.id.toUpperCase()} data-fallback-label={familyName(f, 'fr')} />
+            </div>
+            <div class="family-rich-card__body">
+              <div class="family-rich-card__meta">
+                <span><span>{countByFamily(f.id)}</span> <span data-i18n="products_count">produit(s)</span></span>
+              </div>
+              <h3 class="family-rich-card__title" data-fr={familyName(f, 'fr')} data-en={familyName(f, 'en')}>{familyName(f, 'fr')}</h3>
+              <p class="family-rich-card__tagline" data-fr={f.tagline_fr} data-en={f.tagline_en}>{f.tagline_fr}</p>
+              <ul class="family-rich-card__highlights">
+                {(f.highlights_fr || []).map((h, i) => (
+                  <li data-fr={h} data-en={(f.highlights_en || [])[i] || h}>{h}</li>
+                ))}
+              </ul>
+              <span class="family-rich-card__link"><span data-i18n="view_catalogue">Voir le catalogue</span> →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section featured-products-section section-alt">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-kicker" data-i18n="featured_label">Produit vedette</span>
+        <h2 class="section-title section-title--big" data-i18n="featured_products">Produits phares</h2>
+        <p class="section-subtitle" data-i18n="featured_products_subtitle">Une sélection représentative</p>
+      </div>
+      <div class="featured-products-grid" id="featured-products-grid">
+        {featuredGrid.map((p) => <ProductCard p={p} />)}
+      </div>
+      <div class="featured-products-cta">
+        <a href="/catalogue/" class="btn btn-outline" data-i18n="view_catalogue">Voir tout le catalogue</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import '../scripts/home.js';
+  </script>
 </BaseLayout>
