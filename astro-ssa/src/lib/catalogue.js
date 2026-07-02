@@ -67,6 +67,32 @@ export const APP_ICONS = {
   accent: '<rect x="4" y="9" width="9" height="12" rx="1"/><path d="M6.5 13h4M6.5 17h4M16 8l4-2M16 12h4M16 16l4 2"/>',
 };
 
+// Découverte auto des valeurs de filtres depuis les données (build).
+export function extractFilterOptions() {
+  const ipC = new Map(), ikC = new Map(), featC = new Map(), appC = new Map();
+  let pmin = Infinity, pmax = -Infinity;
+  const isNoise = (f) => /^\d/.test(f) || /lm\/W$/i.test(f) || /^Beam/i.test(f) || /^Up to/i.test(f) || /^\d+°/.test(f);
+  for (const p of products) {
+    for (const f of new Set(p.features_fr || [])) {
+      if (/^IP\d+K?$/i.test(f)) ipC.set(f, (ipC.get(f) || 0) + 1);
+      else if (/^IK\d+$/i.test(f)) ikC.set(f, (ikC.get(f) || 0) + 1);
+      else if (!isNoise(f)) featC.set(f, (featC.get(f) || 0) + 1);
+    }
+    for (const k of (p.applications || [])) appC.set(k, (appC.get(k) || 0) + 1);
+    for (const w of productWatts(p)) { if (w < pmin) pmin = w; if (w > pmax) pmax = w; }
+  }
+  const byCount = (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]);
+  const byNum = (a, b) => a.localeCompare(b, undefined, { numeric: true });
+  return {
+    ips: [...ipC.keys()].sort(byNum),
+    iks: [...ikC.keys()].sort(byNum),
+    feats: [...featC.entries()].filter(([, c]) => c >= 2).sort(byCount).slice(0, 24).map(([v]) => v),
+    apps: [...appC.entries()].sort(byCount).map(([k]) => k),
+    pmin: pmin === Infinity ? 0 : Math.floor(pmin),
+    pmax: pmax === -Infinity ? 1000 : Math.ceil(pmax),
+  };
+}
+
 export const t = (lang, key) => {
   const dict = i18n[lang] || i18n.fr || {};
   return key.split('.').reduce((o, k) => (o && o[k] != null ? o[k] : null), dict) ?? key;

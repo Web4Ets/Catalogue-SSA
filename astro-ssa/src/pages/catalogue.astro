@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { products, families, familyName, extractFilterOptions, i18n } from '../lib/catalogue.js';
+
+const opts = extractFilterOptions();
+const appLabel = (k) => ({ fr: (i18n.fr.app_labels || {})[k] || k, en: (i18n.en.app_labels || {})[k] || k });
+const grouped = families
+  .map((f) => ({ f, list: products.filter((p) => p.family_id === f.id) }))
+  .filter((g) => g.list.length);
+---
+<BaseLayout title="Catalogue — SSA" description="Tout le catalogue SSA : éclairage solaire, public et industriel. Filtres par famille, puissance, application, IP/IK." active="catalogue">
+  <main class="section catalogue-page">
+    <div class="section-inner">
+      <div class="catalogue-header">
+        <h1 class="section-title" data-i18n="catalogue">Catalogue</h1>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <input id="search-input" type="search" placeholder="Rechercher…" data-i18n-placeholder="search_placeholder" autocomplete="off" />
+        </div>
+        <select id="family-filter" class="filter-select" aria-label="Famille">
+          <option value="all" data-i18n="all_families">Toutes les familles</option>
+          {families.map((f) => (<option value={f.id} data-fr={familyName(f, 'fr')} data-en={familyName(f, 'en')}>{familyName(f, 'fr')}</option>))}
+        </select>
+        <select id="sort-select" class="filter-select" aria-label="Tri">
+          <option value="default" data-i18n="sort_default">Tri par défaut</option>
+          <option value="name" data-i18n="sort_name_asc">Nom A→Z</option>
+          <option value="power_asc" data-i18n="sort_power_asc">Puissance croissante</option>
+          <option value="power_desc" data-i18n="sort_power_desc">Puissance décroissante</option>
+        </select>
+        <div class="view-toggle" role="group" aria-label="Affichage">
+          <button type="button" class="view-toggle__btn is-active" data-view="grid" aria-pressed="true" title="Grille"><span aria-hidden="true">▦</span></button>
+          <button type="button" class="view-toggle__btn" data-view="list" aria-pressed="false" title="Liste"><span aria-hidden="true">☰</span></button>
+        </div>
+      </div>
+
+      <div id="advanced-filters" class="advanced-filters">
+        <button type="button" class="filter-toggle-btn" id="filter-toggle-btn" aria-expanded="false">
+          <span data-i18n="advanced_filters">Filtres avancés</span>
+          <span class="filter-toggle-btn__arrow">▼</span>
+        </button>
+        <div class="filter-panel" id="filter-panel" hidden>
+          {opts.apps.length > 0 && (
+            <div class="filter-group">
+              <div class="filter-group__label" data-i18n="applications_title">Applications recommandées</div>
+              <div class="filter-group__chips">
+                {opts.apps.map((k) => (<button type="button" class="filter-chip-btn" data-filter-key="app" data-filter-value={k} data-fr={appLabel(k).fr} data-en={appLabel(k).en}>{appLabel(k).fr}</button>))}
+              </div>
+            </div>
+          )}
+          {opts.ips.length > 0 && (
+            <div class="filter-group"><div class="filter-group__label" data-i18n="ip_label">Indice IP</div><div class="filter-group__chips">{opts.ips.map((v) => (<button type="button" class="filter-chip-btn" data-filter-key="ip" data-filter-value={v}>{v}</button>))}</div></div>
+          )}
+          {opts.iks.length > 0 && (
+            <div class="filter-group"><div class="filter-group__label" data-i18n="ik_label">Indice IK</div><div class="filter-group__chips">{opts.iks.map((v) => (<button type="button" class="filter-chip-btn" data-filter-key="ik" data-filter-value={v}>{v}</button>))}</div></div>
+          )}
+          {opts.feats.length > 0 && (
+            <div class="filter-group"><div class="filter-group__label" data-i18n="features_label">Caractéristiques</div><div class="filter-group__chips">{opts.feats.map((v) => (<button type="button" class="filter-chip-btn" data-filter-key="feat" data-filter-value={v}>{v}</button>))}</div></div>
+          )}
+          <div class="filter-group filter-group--range">
+            <div class="filter-group__label"><span data-i18n="power_label">Puissance</span> (W)</div>
+            <div class="filter-range">
+              <input type="number" id="filter-pmin" min={opts.pmin} max={opts.pmax} step="1" value={opts.pmin} />
+              <span class="filter-range__sep">—</span>
+              <input type="number" id="filter-pmax" min={opts.pmin} max={opts.pmax} step="1" value={opts.pmax} />
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button type="button" class="btn btn-outline btn-sm" id="filter-reset" data-i18n="clear_filter">Réinitialiser</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="active-filters" class="active-filters"></div>
+
+      <div id="catalogue-container">
+        <nav class="famnav" id="famnav" aria-label="Aller à">
+          <span class="famnav__label" data-i18n="jump_to">Aller à</span>
+          {grouped.map(({ f, list }) => (
+            <a class="famnav__chip" href={`#family-${f.id}`} data-family={f.id}><span data-fr={familyName(f, 'fr')} data-en={familyName(f, 'en')}>{familyName(f, 'fr')}</span><span class="famnav__count">{list.length}</span></a>
+          ))}
+        </nav>
+        {grouped.map(({ f, list }) => (
+          <section class="family-section" id={`family-${f.id}`} data-family={f.id}>
+            <header class="family-header">
+              <h2 class="family-name" data-fr={familyName(f, 'fr')} data-en={familyName(f, 'en')}>{familyName(f, 'fr')}</h2>
+              <span class="family-count"><span class="family-count__n">{list.length}</span> <span data-i18n="products_count">produit(s)</span></span>
+              <button type="button" class="famzip-btn" data-family-zip={f.id}>⬇ <span data-i18n="datasheets_zip">Fiches (ZIP)</span></button>
+            </header>
+            <div class="product-grid" data-grid>{list.map((p) => <ProductCard p={p} />)}</div>
+          </section>
+        ))}
+      </div>
+    </div>
+  </main>
+
+  <script>
+    import '../scripts/catalogue.js';
+  </script>
+</BaseLayout>

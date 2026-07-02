@@ -21,6 +21,7 @@ const pmax = watts.length ? Math.max(...watts) : '';
    data-apps={(p.applications || []).join(' ')}
    data-pmin={pmin}
    data-pmax={pmax}
+   data-watts={watts.join(' ')}
    data-haystack={haystack(p, 'fr') + ' ' + haystack(p, 'en')}>
   <span class="compare-toggle" role="button" tabindex="0" data-compare-id={p.id}
         aria-pressed="false" aria-label="Comparer">⇄</span>
