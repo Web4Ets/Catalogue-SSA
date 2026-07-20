@@ -70,6 +70,28 @@ h4, h5, h6 { font-family: var(--font-subtitle); font-weight: 600; }
 a { color: var(--color-primary-text); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+/* Accessibilité — focus clavier visible (contour orange) sur tous les éléments
+   interactifs. :focus-visible ne s'affiche qu'à la navigation clavier (pas à la
+   souris), important pour les marchés publics. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+.hero-dark a:focus-visible,
+.site-header--transparent:not(.site-header--solid) a:focus-visible,
+.site-footer a:focus-visible,
+.site-footer button:focus-visible {
+  outline-color: #fff;
+}
+
 /* Icônes SVG inline (remplacent les émojis) — taille relative au texte. */
 .icon { width: 1.1em; height: 1.1em; display: inline-block; vertical-align: -0.16em; flex-shrink: 0; }
 .btn .icon, .btn-download .icon, .hero-search__btn .icon { margin-right: 0.15em; }
@@ -2053,6 +2075,8 @@ body:has(#devis-bar) #compare-bar { bottom: 62px; }
 .devis-table th { text-align: left; font-family: var(--font-icon); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-muted); padding: 6px 8px; border-bottom: 1px solid var(--color-border); }
 .devis-table td { padding: 8px; border-bottom: 1px solid var(--color-border); }
 .devis-code { font-weight: 700; color: var(--color-primary-text); }
+.devis-qty-col { width: 72px; text-align: center; }
+.devis-qty { width: 58px; padding: 6px 8px; text-align: center; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; }
 .devis-remove { border: none; background: transparent; color: var(--color-muted); font-size: 18px; line-height: 1; cursor: pointer; }
 .devis-remove:hover { color: #d11; }
 .devis-side { position: sticky; top: 90px; }
@@ -2070,6 +2094,25 @@ body:has(#devis-bar) #compare-bar { bottom: 62px; }
   .devis-side { position: static; }
   .devis-form__grid { grid-template-columns: 1fr; }
 }
+
+/* Page Contact */
+.contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.contact-list { list-style: none; margin: 0 0 24px; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+.contact-list li { display: flex; align-items: flex-start; gap: 14px; }
+.contact-list__icon { flex: 0 0 auto; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; background: rgba(247,166,0,0.12); color: var(--color-primary-dark); }
+.contact-list__icon .icon { width: 20px; height: 20px; }
+.contact-list__label { display: block; font-family: var(--font-icon); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-muted); margin-bottom: 2px; }
+.contact-list strong { font-size: 15px; color: var(--color-text); font-weight: 600; }
+.contact-list a { color: inherit; text-decoration: none; }
+.contact-list a:hover strong { color: var(--color-primary-text); }
+.contact-map { border-radius: 16px; overflow: hidden; border: 1px solid var(--color-border); }
+.contact-map iframe { width: 100%; height: 300px; border: 0; display: block; }
+@media (max-width: 860px) { .contact-layout { grid-template-columns: 1fr; } }
+
+/* Nav du pied de page */
+.footer-nav { display: flex; gap: 16px; margin-top: 6px; flex-basis: 100%; }
+.footer-nav a { color: rgba(29,29,27,0.78); font-weight: 600; font-size: 13px; text-decoration: none; }
+.footer-nav a:hover { color: var(--ssa-black); text-decoration: underline; }
 
 /* Compare page */
 .compare-head-row {

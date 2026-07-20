@@ -42,6 +42,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       <nav class="nav">
         <a href="/" class={active === 'home' ? 'active' : ''} data-i18n="home">Accueil</a>
         <a href="/catalogue/" class={active === 'catalogue' ? 'active' : ''} data-i18n="catalogue">Catalogue</a>
+        <a href="/contact/" class={active === 'contact' ? 'active' : ''}>Contact</a>
       </nav>
       <div class="header-actions">
         <a href="/devis/" class={`header-devis${active === 'devis' ? ' active' : ''}`} aria-label="Devis">
@@ -66,6 +67,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
           <img src="/assets/brand/ssa-logo-white-sm.png" alt="SSA" class="logo-img" />
         </a>
         <span class="footer-tagline">Solutions Solaires Adaptées</span>
+        <nav class="footer-nav">
+          <a href="/catalogue/" data-i18n="catalogue">Catalogue</a>
+          <a href="/contact/">Contact</a>
+          <a href="/devis/" data-i18n="quote_bar_title">Devis</a>
+        </nav>
       </div>
       <div class="footer-contact">
         <a href="mailto:ssa@ssa.green">ssa@ssa.green</a><span class="dot"></span>

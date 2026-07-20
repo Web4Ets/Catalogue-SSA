@@ -28,10 +28,11 @@ async function render() {
     const v = p.variants.find((x) => x.code_slx === it.code);
     if (!v) continue;
     if (!byProduct.has(p.id)) byProduct.set(p.id, { p, rows: [] });
-    byProduct.get(p.id).rows.push(v);
+    byProduct.get(p.id).rows.push({ v, qty: it.qty || 1 });
   }
 
   const th = (c) => (DATA.i18n[lang].table_headers || {})[c] || c;
+  const qtyLabel = lang === 'en' ? 'Qty' : 'Qté';
   const groups = [...byProduct.values()].map(({ p, rows }) => `
     <div class="devis-group">
       <div class="devis-group__head">
@@ -39,13 +40,13 @@ async function render() {
         <a href="/produit/${p.id}/" class="devis-group__name">${esc(p.name_slx)}</a>
       </div>
       <table class="devis-table">
-        <thead><tr><th>${th('code_slx')}</th><th>${th('designation')}</th><th>${th('power')}</th><th>${th('lumen')}</th><th></th></tr></thead>
+        <thead><tr><th>${th('code_slx')}</th><th>${th('designation')}</th><th>${th('power')}</th><th class="devis-qty-col">${qtyLabel}</th><th></th></tr></thead>
         <tbody>
-          ${rows.map((v) => `<tr>
+          ${rows.map(({ v, qty }) => `<tr>
             <td class="devis-code">${esc(v.code_slx)}</td>
             <td>${esc(v.designation || '')}</td>
             <td>${esc(v.power || '')}</td>
-            <td>${esc(v.lumen || '')}</td>
+            <td class="devis-qty-col"><input type="number" class="devis-qty" min="1" step="1" value="${qty}" data-qty-code="${esc(v.code_slx)}" aria-label="${qtyLabel} ${esc(v.code_slx)}" /></td>
             <td><button type="button" class="devis-remove" data-remove-code="${esc(v.code_slx)}" aria-label="${t('remove')}">×</button></td>
           </tr>`).join('')}
         </tbody>
@@ -81,9 +82,10 @@ function buildMailto(fields) {
   const lang = window.SSA.lang;
   const items = window.SSA_devis.getItems();
   const subj = lang === 'en' ? `Quote request — ${items.length} reference(s)` : `Demande de devis — ${items.length} référence(s)`;
+  const qtyWord = lang === 'en' ? 'qty' : 'qté';
   const lines = items.map((it) => {
     const p = (DATA.products || []).find((x) => x.id === it.id);
-    return `- ${p ? p.name_slx : ''} · ${it.code}`;
+    return `- ${p ? p.name_slx : ''} · ${it.code} · ${qtyWord} ${it.qty || 1}`;
   });
   const intro = lang === 'en' ? 'Hello,\n\nI would like a quote for the following references:\n' : 'Bonjour,\n\nJe souhaite un devis pour les références suivantes :\n';
   const coord = [
@@ -106,6 +108,10 @@ document.addEventListener('click', (e) => {
     render();
   }
   if (e.target.closest('#devis-clear-all')) { window.SSA_devis.clearQuote(); render(); }
+});
+document.addEventListener('change', (e) => {
+  const q = e.target.closest('.devis-qty');
+  if (q) window.SSA_devis.setQty(q.dataset.qtyCode, q.value);
 });
 document.addEventListener('submit', (e) => {
   if (e.target.id !== 'devis-form') return;

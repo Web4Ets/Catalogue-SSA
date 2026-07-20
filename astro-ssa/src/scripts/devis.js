@@ -18,14 +18,19 @@ const codesOf = (id) => { const p = _products.find((x) => x.id === id); return p
 
 function toggleRef(id, code) {
   let items = getItems();
-  items = hasRef(code) ? items.filter((i) => i.code !== code) : [...items, { id, code }];
+  items = hasRef(code) ? items.filter((i) => i.code !== code) : [...items, { id, code, qty: 1 }];
   saveItems(items); syncButtons(); renderBar();
+}
+function setQty(code, qty) {
+  const items = getItems();
+  const it = items.find((i) => i.code === code);
+  if (it) { it.qty = Math.max(1, parseInt(qty, 10) || 1); saveItems(items); renderBar(); }
 }
 function toggleProduct(id) {
   let items = getItems();
   const codes = codesOf(id);
   if (items.some((i) => i.id === id)) items = items.filter((i) => i.id !== id);            // retirer tout le produit
-  else { const have = new Set(items.map((i) => i.code)); codes.forEach((c) => { if (!have.has(c)) items.push({ id, code: c }); }); }
+  else { const have = new Set(items.map((i) => i.code)); codes.forEach((c) => { if (!have.has(c)) items.push({ id, code: c, qty: 1 }); }); }
   saveItems(items); syncButtons(); renderBar();
 }
 function clearQuote() { saveItems([]); syncButtons(); renderBar(); }
@@ -82,4 +87,4 @@ document.addEventListener('click', (e) => {
 window.SSA.onLangChange(() => { syncButtons(); renderBar(); });
 
 syncButtons();
-window.SSA_devis = { toggleRef, toggleProduct, clearQuote, getItems, hasRef, hasProduct };
+window.SSA_devis = { toggleRef, toggleProduct, setQty, clearQuote, getItems, hasRef, hasProduct };

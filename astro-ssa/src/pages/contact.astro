@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { icon } from '../lib/icons.js';
+
+// Coordonnées SSA (voir aussi le footer).
+const CONTACT = {
+  company: 'SSA — Solutions Solaires Adaptées',
+  address: '118 rue Anthonin Bonnaud, 84120 Pertuis, France',
+  email: 'ssa@ssa.green',
+  phone: '04 84 85 60 32',
+};
+// Carte OpenStreetMap (sans clé API) centrée sur Pertuis (84120).
+const osm = 'https://www.openstreetmap.org/export/embed.html?bbox=5.478%2C43.680%2C5.528%2C43.708&layer=mapnik&marker=43.6944%2C5.5028';
+---
+<BaseLayout title="Contact — SSA" description="Contactez SSA — Solutions Solaires Adaptées : adresse, téléphone, email et formulaire de contact." active="contact">
+  <main class="section contact-page">
+    <div class="section-inner">
+      <div class="section-head" style="text-align:left; margin-bottom:32px; max-width:none;">
+        <span class="section-kicker" data-fr="Nous contacter" data-en="Get in touch">Nous contacter</span>
+        <h1 class="section-title section-title--big">Contact</h1>
+        <p class="section-subtitle" style="margin:8px 0 0;" data-fr="Une question, un projet, une demande de devis ? Notre équipe vous répond." data-en="A question, a project, a quote request? Our team is here to help.">Une question, un projet, une demande de devis ? Notre équipe vous répond.</p>
+      </div>
+
+      <div class="contact-layout">
+        <div class="contact-info">
+          <ul class="contact-list">
+            <li>
+              <span class="contact-list__icon" set:html={icon('quote')}></span>
+              <div><span class="contact-list__label" data-fr="Société" data-en="Company">Société</span><strong>{CONTACT.company}</strong></div>
+            </li>
+            <li>
+              <span class="contact-list__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+              <div><span class="contact-list__label" data-fr="Adresse" data-en="Address">Adresse</span><strong>{CONTACT.address}</strong></div>
+            </li>
+            <li>
+              <span class="contact-list__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5c0 8 7 15 15 15l0-3.5-4-2-2 2c-2.5-1.3-4.2-3-5.5-5.5l2-2-2-4Z"/></svg></span>
+              <div><span class="contact-list__label" data-fr="Téléphone" data-en="Phone">Téléphone</span><a href={`tel:${CONTACT.phone.replace(/\s/g, '')}`}><strong>{CONTACT.phone}</strong></a></div>
+            </li>
+            <li>
+              <span class="contact-list__icon" set:html={icon('quote')}></span>
+              <div><span class="contact-list__label">Email</span><a href={`mailto:${CONTACT.email}`}><strong>{CONTACT.email}</strong></a></div>
+            </li>
+          </ul>
+          <div class="contact-map">
+            <iframe title="Carte SSA — Pertuis" src={osm} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+
+        <form class="contact-form devis-form" id="contact-form">
+          <h2 class="devis-form__title" data-fr="Envoyez-nous un message" data-en="Send us a message">Envoyez-nous un message</h2>
+          <div class="devis-form__grid">
+            <label><span data-fr="Nom" data-en="Name">Nom</span> <input type="text" name="name" required /></label>
+            <label><span data-fr="Société" data-en="Company">Société</span> <input type="text" name="company" /></label>
+            <label>Email <input type="email" name="email" required /></label>
+            <label><span data-fr="Téléphone" data-en="Phone">Téléphone</span> <input type="tel" name="phone" /></label>
+          </div>
+          <label class="devis-form__msg"><span data-fr="Message" data-en="Message">Message</span> <textarea name="message" rows="4" required></textarea></label>
+          <button type="submit" class="btn btn-primary btn-lg"><span data-fr="Envoyer" data-en="Send">Envoyer</span></button>
+          <p class="devis-form__note" data-fr="Ouvre votre messagerie avec le message pré-rempli." data-en="Opens your email app with the message pre-filled.">Ouvre votre messagerie avec le message pré-rempli.</p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    import '../scripts/contact.js';
+  </script>
+</BaseLayout>
