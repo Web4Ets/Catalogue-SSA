@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductCard from '../../components/ProductCard.astro';
-import { products, familyById, familyName, tableColumns, APP_ICONS, i18n } from '../../lib/catalogue.js';
+import { products, familyById, familyName, tableColumns, APP_ICONS, i18n, parseWatts, ipRating, productWattRange } from '../../lib/catalogue.js';
 import { icon } from '../../lib/icons.js';
 
 export function getStaticPaths() {
@@ -26,6 +26,19 @@ const next = siblings[(sIdx + 1) % siblings.length];
 const title = `${p.name_slx} — SSA`;
 const desc = p.description_fr.slice(0, 160);
 
+// Chiffres-clés du bandeau technique (« Ingénierie ») — dérivés des données produit.
+const bigNum = (v) => { const d = String(v ?? '').replace(/[^\d]/g, ''); return d ? parseInt(d, 10) : null; };
+const effVals = p.variants.map((v) => parseWatts(v.efficacy)).filter((n) => n !== null);
+const lumVals = p.variants.map((v) => bigNum(v.lumen)).filter((n) => n !== null);
+const powerRange = productWattRange(p);
+const ip = ipRating(p);
+const stats = [
+  powerRange && { v: powerRange.replace(/\s*W$/, ''), u: 'W', kfr: 'Puissance', ken: 'Power' },
+  effVals.length && { v: String(Math.max(...effVals)), u: 'lm/W', kfr: 'Efficacité', ken: 'Efficacy' },
+  lumVals.length && { v: Math.max(...lumVals).toLocaleString('fr-FR'), u: 'lm', kfr: 'Flux max', ken: 'Max output' },
+  ip && { v: ip, u: '', kfr: 'Étanchéité', ken: 'Rating' },
+].filter(Boolean).slice(0, 4);
+
 // Bouton « Demander un devis » : mailto pré-rempli (produit, code SSA, lien fiche).
 const productUrl = new URL(`/produit/${p.id}/`, Astro.site).href;
 const firstCode = (p.variants[0] && p.variants[0].code_slx) || p.code_prefix;
@@ -48,18 +61,30 @@ const mailto = (lang) => {
       </div>
 
       <div class="product-detail product-detail--v2">
-        <header class="product-head">
-          <div class="product-head__main">
-            <span class="product-kicker" data-fr={familyName(fam, 'fr')} data-en={familyName(fam, 'en')}>{familyName(fam, 'fr')}</span>
-            <h1 class="product-title">{p.name_slx}</h1>
-            <span class="product-accent"></span>
+        <header class="product-hero product-hero--tech">
+          <div class="product-hero__grid-bg" aria-hidden="true"></div>
+          <div class="product-hero__top">
+            <div class="product-hero__main">
+              <span class="product-hero__kicker" data-fr={familyName(fam, 'fr')} data-en={familyName(fam, 'en')}>{familyName(fam, 'fr')}</span>
+              <h1 class="product-hero__title">{p.name_slx}</h1>
+            </div>
+            {siblings.length > 1 && (
+              <nav class="product-nav product-nav--tech">
+                <a class="product-nav__btn" href={`/produit/${prev.id}/`} title={prev.name_slx} data-nav="prev">‹</a>
+                <span class="product-nav__count">{sIdx + 1} / {siblings.length}</span>
+                <a class="product-nav__btn" href={`/produit/${next.id}/`} title={next.name_slx} data-nav="next">›</a>
+              </nav>
+            )}
           </div>
-          {siblings.length > 1 && (
-            <nav class="product-nav">
-              <a class="product-nav__btn" href={`/produit/${prev.id}/`} title={prev.name_slx} data-nav="prev">‹</a>
-              <span class="product-nav__count">{sIdx + 1} / {siblings.length}</span>
-              <a class="product-nav__btn" href={`/produit/${next.id}/`} title={next.name_slx} data-nav="next">›</a>
-            </nav>
+          {stats.length > 0 && (
+            <dl class="product-stats">
+              {stats.map((s) => (
+                <div class="pstat">
+                  <dd class="pstat__value">{s.v}{s.u && <span class="pstat__unit">{s.u}</span>}</dd>
+                  <dt class="pstat__label" data-fr={s.kfr} data-en={s.ken}>{s.kfr}</dt>
+                </div>
+              ))}
+            </dl>
           )}
         </header>
 

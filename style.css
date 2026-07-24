@@ -2331,3 +2331,156 @@ body:has(#devis-bar) #compare-bar { bottom: 62px; }
   .gallery-thumbs { order: 0; flex-direction: row; flex-wrap: wrap; justify-content: center; }
 }
 @media print { .gallery-thumbs { display: none !important; } }
+
+/* ============================================================
+   REDESIGN — Accueil « Lumière » (hero clair, produit héroïsé)
+   ============================================================ */
+.hero-light {
+  position: relative; overflow: hidden;
+  background: #fbf8f2;
+  padding: 68px 24px 76px;
+  border-bottom: 1px solid var(--color-border);
+}
+.hero-light__bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(58% 60% at 84% 26%, rgba(247,166,0,0.18), transparent 70%),
+    radial-gradient(42% 55% at 6% 92%, rgba(247,166,0,0.08), transparent 72%);
+}
+.hero-light__grid {
+  position: relative; z-index: 1;
+  max-width: var(--max-w-wide); margin: 0 auto;
+  display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 54px; align-items: center;
+}
+.hero-light__inner { text-align: left; }
+.hero-light__kicker {
+  display: inline-block; font-family: var(--font-icon);
+  font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--color-primary-text);
+  padding: 6px 15px; border: 1px solid rgba(247,166,0,0.45);
+  border-radius: 999px; background: rgba(247,166,0,0.12);
+  margin-bottom: 26px;
+}
+.hero-light__title {
+  font-family: var(--font-title);
+  font-size: clamp(34px, 5.6vw, 60px); font-weight: 800;
+  letter-spacing: -0.02em; line-height: 1.04;
+  color: var(--ssa-black); margin-bottom: 22px; text-wrap: balance;
+}
+.hero-light__subtitle {
+  font-size: clamp(15px, 1.7vw, 19px); color: var(--color-muted);
+  max-width: 520px; margin-bottom: 34px; line-height: 1.55;
+}
+.hero-light .hero-search {
+  margin: 0 0 26px; max-width: 560px;
+  box-shadow: 0 14px 34px rgba(29,29,27,0.10);
+  border: 1px solid var(--color-border);
+}
+.hero-light__cta { display: flex; gap: 14px; flex-wrap: wrap; }
+.hero-light__visual {
+  position: relative; display: grid; place-items: center; min-height: 340px;
+}
+.hero-light__halo {
+  position: absolute; width: 82%; aspect-ratio: 1; z-index: 0;
+  background: radial-gradient(circle, rgba(247,166,0,0.30), rgba(247,166,0,0.08) 46%, transparent 68%);
+  filter: blur(10px);
+}
+.hero-light__product {
+  position: relative; z-index: 1;
+  display: block; width: min(430px, 100%); text-align: center;
+  background: #fff; border-radius: 24px; padding: 26px 26px 20px;
+  box-shadow: 0 34px 66px -24px rgba(29,29,27,0.40);
+  text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hero-light__product img {
+  width: 100%; height: 300px; object-fit: contain; display: block;
+}
+.hero-light__product:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 44px 80px -26px rgba(29,29,27,0.46); text-decoration: none;
+}
+.hero-light__tag {
+  display: block; margin-top: 12px;
+  font-family: var(--font-title); font-size: 22px; font-weight: 700;
+  letter-spacing: 0.01em; color: var(--ssa-black);
+}
+@media (max-width: 900px) {
+  .hero-light { padding: 36px 20px 48px; }
+  .hero-light__grid { grid-template-columns: 1fr; gap: 28px; }
+  .hero-light__inner { text-align: center; max-width: 620px; margin: 0 auto; }
+  .hero-light .hero-search { margin-left: auto; margin-right: auto; }
+  .hero-light__cta { justify-content: center; }
+  .hero-light__visual { order: -1; min-height: 0; }
+  .hero-light__product img { height: 250px; }
+}
+
+/* ============================================================
+   REDESIGN — Fiche produit « Ingénierie » (bandeau technique)
+   ============================================================ */
+.product-hero--tech {
+  position: relative; overflow: hidden;
+  margin-bottom: 32px; padding: 32px 38px 30px;
+  border-radius: 18px; color: #fff;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(247,166,0,0.26), transparent 46%),
+    radial-gradient(circle at 92% 88%, rgba(247,166,0,0.12), transparent 52%),
+    linear-gradient(155deg, #131311 0%, #1d1d1b 62%, #131311 100%);
+}
+.product-hero__grid-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse at 70% 40%, black 18%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse at 70% 40%, black 18%, transparent 78%);
+}
+.product-hero__top {
+  position: relative; z-index: 1;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 22px;
+}
+.product-hero__main { min-width: 0; }
+.product-hero__kicker {
+  display: inline-block; font-family: var(--font-icon);
+  font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ssa-orange); margin-bottom: 8px;
+}
+.product-hero__title {
+  font-family: var(--font-title);
+  font-size: clamp(30px, 4.4vw, 48px); font-weight: 800;
+  letter-spacing: -0.015em; line-height: 1.05; margin: 0; color: #fff;
+}
+.product-nav--tech .product-nav__btn {
+  background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); color: #fff;
+}
+.product-nav--tech .product-nav__btn:hover {
+  background: var(--color-primary); border-color: var(--color-primary); color: #1d1d1b;
+}
+.product-nav--tech .product-nav__count { color: rgba(255,255,255,0.6); }
+.product-stats {
+  position: relative; z-index: 1;
+  margin: 26px 0 0; display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1px; background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; overflow: hidden;
+}
+.pstat { background: rgba(20,19,17,0.72); padding: 16px 18px; }
+.pstat__value {
+  margin: 0; font-family: var(--font-title); font-weight: 800;
+  font-size: clamp(24px, 3vw, 32px); letter-spacing: -0.02em; color: var(--ssa-orange);
+  line-height: 1; display: flex; align-items: baseline; gap: 5px; flex-wrap: wrap;
+}
+.pstat__unit { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.55); letter-spacing: 0; }
+.pstat__label {
+  margin: 8px 0 0; font-family: var(--font-icon);
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.62);
+}
+@media (max-width: 760px) {
+  .product-hero--tech { padding: 24px 20px 22px; border-radius: 14px; }
+  .product-stats { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .product-hero__top { flex-direction: column; }
+  .product-nav--tech { align-self: flex-end; }
+}
