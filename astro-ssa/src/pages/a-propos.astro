@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { icon } from '../lib/icons.js';
+import { productById } from '../lib/catalogue.js';
+
+const visual = productById('all-in-two-solar') || productById('solar-street');
+const features = [
+  { ic: 'bolt', fr: 'Des solutions innovantes, hybrides et évolutives.', en: 'Innovative, hybrid and scalable solutions.' },
+  { ic: 'shield', fr: 'Une qualité de fabrication certifiée.', en: 'Certified manufacturing quality.' },
+  { ic: 'tag', fr: 'Des prix accessibles à tous !', en: 'Prices affordable for everyone!' },
+];
+---
+<BaseLayout title="À propos — SSA" description="Qui sommes-nous ? SSA — Solutions Solaires Adaptées : le solaire économique, rentable et à votre portée." active="apropos">
+  <main class="section about-page">
+    <div class="section-inner">
+      <div class="section-head" style="text-align:left; margin-bottom:36px; max-width:none;">
+        <span class="section-kicker" data-fr="À propos" data-en="About">À propos</span>
+        <h1 class="section-title section-title--big" data-fr="Qui sommes-nous ?" data-en="Who are we?">Qui sommes-nous ?</h1>
+      </div>
+
+      <div class="about-intro">
+        <div class="about-intro__text">
+          <p class="about-lead" data-fr="Le solaire est désormais économique, rentable, et à votre portée."
+             data-en="Solar is now affordable, profitable and within your reach.">Le solaire est désormais économique, rentable, et à votre portée.</p>
+          <p data-fr="D'installation simple et efficace, nos solutions SSA évoluent au rythme de vos besoins, pouvant être indépendantes du réseau électrique."
+             data-en="Simple and efficient to install, our SSA solutions evolve with your needs and can operate independently from the grid.">D'installation simple et efficace, nos solutions SSA évoluent au rythme de vos besoins, pouvant être indépendantes du réseau électrique.</p>
+          <p data-fr="Nos produits vous sont garantis pour une durée assurant la rentabilité de votre investissement."
+             data-en="Our products come with a warranty that ensures the profitability of your investment.">Nos produits vous sont garantis pour une durée assurant la rentabilité de votre investissement.</p>
+          <p data-fr="Nos équipes techniques qualifiées sont au rendez-vous pour vous accompagner de manière optimale."
+             data-en="Our qualified technical teams are here to support you every step of the way.">Nos équipes techniques qualifiées sont au rendez-vous pour vous accompagner de manière optimale.</p>
+        </div>
+        {visual && (
+          <div class="about-intro__visual" aria-hidden="true">
+            <div class="about-glow"></div>
+            <img src={`/assets/images/${visual.image}`} alt="" loading="lazy" />
+          </div>
+        )}
+      </div>
+
+      <p class="about-closing" data-fr="Solutions Solaires Adaptées (SSA) vous offre ainsi à la fois souplesse, économie et bien-être."
+         data-en="Solutions Solaires Adaptées (SSA) brings you flexibility, savings and comfort — all at once.">Solutions Solaires Adaptées (SSA) vous offre ainsi à la fois souplesse, économie et bien-être.</p>
+
+      <div class="about-features">
+        {features.map((f) => (
+          <div class="about-feature">
+            <span class="about-feature__icon" set:html={icon(f.ic)}></span>
+            <p data-fr={f.fr} data-en={f.en}>{f.fr}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="about-cta">
+        <a href="/catalogue/" class="btn btn-primary btn-lg" data-i18n="hero_cta">Explorer le catalogue</a>
+        <a href="/contact/" class="btn btn-outline btn-lg"><span data-fr="Nous contacter" data-en="Contact us">Nous contacter</span></a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

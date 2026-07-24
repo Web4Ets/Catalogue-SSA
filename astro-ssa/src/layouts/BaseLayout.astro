@@ -42,6 +42,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       <nav class="nav">
         <a href="/" class={active === 'home' ? 'active' : ''} data-i18n="home">Accueil</a>
         <a href="/catalogue/" class={active === 'catalogue' ? 'active' : ''} data-i18n="catalogue">Catalogue</a>
+        <a href="/a-propos/" class={active === 'apropos' ? 'active' : ''} data-fr="À propos" data-en="About">À propos</a>
         <a href="/contact/" class={active === 'contact' ? 'active' : ''}>Contact</a>
       </nav>
       <div class="header-actions">
@@ -69,6 +70,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
         <span class="footer-tagline">Solutions Solaires Adaptées</span>
         <nav class="footer-nav">
           <a href="/catalogue/" data-i18n="catalogue">Catalogue</a>
+          <a href="/a-propos/" data-fr="À propos" data-en="About">À propos</a>
           <a href="/contact/">Contact</a>
           <a href="/devis/" data-i18n="quote_bar_title">Devis</a>
         </nav>

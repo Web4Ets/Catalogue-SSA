@@ -14,6 +14,10 @@ export const ICONS = {
   arrowRight: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+  bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
+  shield: '<path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-3Z"/><path d="M9 12l2 2 4-4"/>',
+  tag: '<path d="M20.6 13.4 12 22l-9-9 8.6-8.6A2 2 0 0 1 11 3.8H19a2 2 0 0 1 2 2v6a2 2 0 0 1-.4 1.6Z"/><circle cx="16.3" cy="7.7" r="1.3"/>',
+  sun: '<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
 };
 
 // Retourne une chaîne <svg> prête à insérer. `cls` = classes CSS optionnelles.
