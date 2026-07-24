@@ -41,8 +41,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       </a>
       <nav class="nav">
         <a href="/" class={active === 'home' ? 'active' : ''} data-i18n="home">Accueil</a>
-        <a href="/catalogue/" class={active === 'catalogue' ? 'active' : ''} data-i18n="catalogue">Catalogue</a>
         <a href="/a-propos/" class={active === 'apropos' ? 'active' : ''} data-fr="À propos" data-en="About">À propos</a>
+        <a href="/catalogue/" class={active === 'catalogue' ? 'active' : ''} data-i18n="catalogue">Catalogue</a>
         <a href="/contact/" class={active === 'contact' ? 'active' : ''}>Contact</a>
       </nav>
       <div class="header-actions">
