@@ -96,7 +96,7 @@ function buildMailto(fields) {
   ].filter(Boolean).join('\n');
   const msg = fields.message ? `\n\n${fields.message}` : '';
   const body = intro + lines.join('\n') + '\n\n' + coord + msg + (lang === 'en' ? '\n\nThank you.' : '\n\nMerci.');
-  return `mailto:ssa@ssa.green?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+  return `mailto:contact@ssa.green?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
 }
 
 document.addEventListener('click', (e) => {

@@ -47,7 +47,7 @@ const mailto = (lang) => {
   const body = lang === 'en'
     ? `Hello,\n\nI would like a quote for the following product:\n- Product: ${p.name_slx}\n- SSA code: ${firstCode}\n- Datasheet: ${productUrl}\n\nThank you.`
     : `Bonjour,\n\nJe souhaite recevoir un devis pour le produit suivant :\n- Produit : ${p.name_slx}\n- Code SSA : ${firstCode}\n- Fiche : ${productUrl}\n\nMerci.`;
-  return `mailto:ssa@ssa.green?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+  return `mailto:contact@ssa.green?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
 };
 ---
 <BaseLayout title={title} description={desc} active="catalogue" image={`/assets/images/${p.image}`}>
