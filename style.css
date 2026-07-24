@@ -31,12 +31,12 @@
   --max-w: 1200px;
   --max-w-wide: 1320px;
 
-  /* Typography per brand guidelines (fallbacks chain proprietary -> closest Google Font -> system) */
-  --font-body: 'Century Gothic', 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-  --font-title: 'Bebas Neue', 'Century Gothic', 'Jost', sans-serif;
-  --font-subtitle: 'Century Gothic', 'Jost', -apple-system, sans-serif;
-  --font-icon: 'Century Gothic', 'Jost', sans-serif;
-  --font-logo: 'Century Gothic', 'Jost', sans-serif;
+  /* Typography — Montserrat (titres/labels) + Inter (corps). Fallbacks system. */
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-title: 'Montserrat', 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  --font-subtitle: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  --font-icon: 'Montserrat', 'Inter', -apple-system, sans-serif;
+  --font-logo: 'Montserrat', 'Inter', sans-serif;
 
   /* Back-compat alias */
   --font: var(--font-body);
@@ -62,9 +62,9 @@ html, body {
   }
 }
 
-h1, h2, h3 { font-family: var(--font-title); font-weight: 400; letter-spacing: 0.025em; }
-/* Bebas Neue n'a qu'une graisse 400 — neutralise les faux-gras hérités du template */
-.hero-dark__title, .section-title, .section-title--big, .product-detail-info h1 { font-weight: 400 !important; letter-spacing: 0.025em; }
+h1, h2, h3 { font-family: var(--font-title); font-weight: 700; letter-spacing: -0.01em; }
+/* Montserrat : titres en gras, léger interlettrage négatif aux grandes tailles */
+.hero-dark__title, .section-title, .section-title--big, .product-detail-info h1 { font-weight: 800 !important; letter-spacing: -0.015em; }
 h4, h5, h6 { font-family: var(--font-subtitle); font-weight: 600; }
 
 a { color: var(--color-primary-text); text-decoration: none; }
