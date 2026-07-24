@@ -119,7 +119,7 @@ CONTACT = {
     "company": "SSA — Solutions Solaires Adaptées",
     "website": "ssa.green",
     "address": "118 rue Anthonin Bonnaud, 84120 Pertuis, FRANCE",
-    "email": "ssa@ssa.green",
+    "email": "contact@ssa.green",
     "phone": "04 84 85 60 32",
 }
 

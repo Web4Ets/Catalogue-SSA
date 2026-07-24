@@ -1,4 +1,4 @@
-// Page Contact : le formulaire ouvre un mail pré-rempli vers ssa@ssa.green.
+// Page Contact : le formulaire ouvre un mail pré-rempli vers contact@ssa.green.
 import './common.js';
 
 document.addEventListener('submit', (e) => {
@@ -14,5 +14,5 @@ document.addEventListener('submit', (e) => {
     f.phone && `${lang === 'en' ? 'Phone' : 'Téléphone'}: ${f.phone}`,
   ].filter(Boolean).join('\n');
   const body = `${coord}\n\n${f.message || ''}`;
-  location.href = `mailto:ssa@ssa.green?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  location.href = `mailto:contact@ssa.green?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 });
