@@ -2484,3 +2484,19 @@ body:has(#devis-bar) #compare-bar { bottom: 62px; }
   .product-hero__top { flex-direction: column; }
   .product-nav--tech { align-self: flex-end; }
 }
+
+/* Bouton « Itinéraire » sous la carte (page Contact) */
+.contact-directions {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 12px;
+  font-family: var(--font-icon); font-weight: 700; font-size: 13px;
+  color: var(--color-primary-text); text-decoration: none;
+  padding: 9px 14px; border: 1px solid var(--color-border); border-radius: var(--radius);
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.contact-directions:hover {
+  background: rgba(247,166,0,0.08); border-color: var(--color-primary); text-decoration: none;
+}
+.contact-directions .contact-list__icon {
+  width: auto; height: auto; background: none; padding: 0; color: var(--color-primary-dark);
+}
+.contact-directions .icon { width: 18px; height: 18px; }

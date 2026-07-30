@@ -9,8 +9,11 @@ const CONTACT = {
   email: 'contact@ssa.green',
   phone: '04 90 09 72 76',
 };
-// Carte OpenStreetMap (sans clé API) centrée sur Pertuis (84120).
-const osm = 'https://www.openstreetmap.org/export/embed.html?bbox=5.478%2C43.680%2C5.528%2C43.708&layer=mapnik&marker=43.6944%2C5.5028';
+// Carte OpenStreetMap (sans clé API) centrée sur le centre de Pertuis (84120).
+// Note : « Rue Jeanne Mance » n'est pas (encore) dans OSM → repère approximatif
+// sur la ville. Le bouton « Itinéraire » ci-dessous ouvre l'adresse exacte.
+const osm = 'https://www.openstreetmap.org/export/embed.html?bbox=5.488%2C43.686%2C5.518%2C43.704&layer=mapnik&marker=43.6951%2C5.5033';
+const directions = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(`${CONTACT.address}`);
 ---
 <BaseLayout title="Contact — SSA" description="Contactez SSA — Solutions Solaires Adaptées : adresse, téléphone, email et formulaire de contact." active="contact">
   <main class="section contact-page">
@@ -44,6 +47,10 @@ const osm = 'https://www.openstreetmap.org/export/embed.html?bbox=5.478%2C43.680
           <div class="contact-map">
             <iframe title="Carte SSA — Pertuis" src={osm} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
+          <a class="contact-directions" href={directions} target="_blank" rel="noopener">
+            <span class="contact-list__icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+            <span data-fr="Itinéraire vers l'agence" data-en="Get directions">Itinéraire vers l'agence</span> →
+          </a>
         </div>
 
         <form class="contact-form devis-form" id="contact-form">
