@@ -132,7 +132,7 @@ document.addEventListener('submit', async (e) => {
   const label = btn ? btn.innerHTML : '';
   if (btn) { btn.disabled = true; btn.textContent = lang === 'en' ? 'Sending…' : 'Envoi…'; }
 
-  const res = await sendForm({ subject, body, replyEmail: fields.email, replyName: fields.name, honeypot: fields.company_url, mailto });
+  const res = await sendForm({ subject, body, replyEmail: fields.email, replyName: fields.name, honeypot: fields.company_url, mailto, lang, type: 'devis' });
 
   if (res.ok) {
     window.SSA_devis.clearQuote();

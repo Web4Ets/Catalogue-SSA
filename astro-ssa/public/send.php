@@ -22,6 +22,8 @@ $subject = isset($_POST['subject']) ? (string) $_POST['subject'] : 'Message du s
 $body    = isset($_POST['body'])    ? (string) $_POST['body']    : '';
 $email   = isset($_POST['email'])   ? (string) $_POST['email']   : '';
 $name    = isset($_POST['name'])    ? (string) $_POST['name']    : '';
+$lang    = (isset($_POST['lang']) && $_POST['lang'] === 'en') ? 'en' : 'fr';
+$type    = (isset($_POST['type']) && $_POST['type'] === 'devis') ? 'devis' : 'contact';
 
 if (trim($body) === '') {
     http_response_code(422);
@@ -54,6 +56,40 @@ $headers .= "Content-Transfer-Encoding: 8bit\r\n";
 $encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
 
 $sent = @mail($to, $encodedSubject, $body, $headers, "-f {$fromAddr}");
+
+// Accusé de réception automatique au visiteur (best-effort, n'affecte pas la
+// réponse : l'essentiel est que SSA ait reçu la demande).
+if ($sent && $replyAddr !== '') {
+    if ($lang === 'en') {
+        $ackSubject = $type === 'devis' ? 'We received your quote request — SSA' : 'We received your message — SSA';
+        $greeting   = $name !== '' ? "Hello {$name}," : 'Hello,';
+        $intro      = $type === 'devis'
+            ? 'Thank you for your quote request. Our team will prepare your quote and get back to you shortly.'
+            : 'Thank you for your message. Our team will get back to you shortly.';
+        $recapLabel = 'Copy of your message:';
+        $signature  = "— The SSA team";
+    } else {
+        $ackSubject = $type === 'devis' ? 'Votre demande de devis a bien été reçue — SSA' : 'Votre message a bien été reçu — SSA';
+        $greeting   = $name !== '' ? "Bonjour {$name}," : 'Bonjour,';
+        $intro      = $type === 'devis'
+            ? "Merci pour votre demande de devis. Notre équipe la prépare et revient vers vous rapidement."
+            : "Merci pour votre message. Notre équipe vous répondra dans les meilleurs délais.";
+        $recapLabel = 'Copie de votre message :';
+        $signature  = "— L'équipe SSA";
+    }
+
+    $ackBody = $greeting . "\n\n" . $intro . "\n\n" . $signature
+             . "\n\n----------------------------------------\n" . $recapLabel . "\n\n" . $body;
+
+    $ackHeaders  = "From: {$fromName} <{$fromAddr}>\r\n";
+    $ackHeaders .= "Reply-To: SSA <{$fromAddr}>\r\n";
+    $ackHeaders .= "MIME-Version: 1.0\r\n";
+    $ackHeaders .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $ackHeaders .= "Content-Transfer-Encoding: 8bit\r\n";
+    $ackEncoded  = '=?UTF-8?B?' . base64_encode($ackSubject) . '?=';
+
+    @mail($replyAddr, $ackEncoded, $ackBody, $ackHeaders, "-f {$fromAddr}");
+}
 
 if ($sent) {
     echo json_encode(['ok' => true]);

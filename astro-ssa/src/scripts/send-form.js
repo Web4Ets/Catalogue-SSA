@@ -1,7 +1,7 @@
 // Envoi d'un formulaire vers /send.php (PHP hébergé sur IONOS).
 // En cas d'échec (script absent, hors-ligne, aperçu local sans PHP), on se
 // replie sur le mail pré-rempli (mailto) pour ne jamais perdre la demande.
-export async function sendForm({ subject, body, replyEmail = '', replyName = '', honeypot = '', mailto = '' }) {
+export async function sendForm({ subject, body, replyEmail = '', replyName = '', honeypot = '', mailto = '', lang = 'fr', type = 'contact' }) {
   try {
     const res = await fetch('/send.php', {
       method: 'POST',
@@ -12,6 +12,8 @@ export async function sendForm({ subject, body, replyEmail = '', replyName = '',
         email: replyEmail || '',
         name: replyName || '',
         company_url: honeypot || '',
+        lang: lang || 'fr',
+        type: type || 'contact',
       }),
     });
     if (res.ok) {
