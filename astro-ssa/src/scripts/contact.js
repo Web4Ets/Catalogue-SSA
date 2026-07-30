@@ -23,7 +23,10 @@ document.addEventListener('submit', async (e) => {
   const label = btn ? btn.innerHTML : '';
   if (btn) { btn.disabled = true; btn.textContent = lang === 'en' ? 'Sending…' : 'Envoi…'; }
 
-  const res = await sendForm({ subject, body, replyEmail: f.email, replyName: f.name, honeypot: f.company_url, mailto, lang, type: 'contact' });
+  const res = await sendForm({
+    subject, body, replyEmail: f.email, replyName: f.name, honeypot: f.company_url, mailto, lang, type: 'contact',
+    fields: { company: f.company, phone: f.phone, message: f.message },
+  });
 
   if (res.ok) {
     form.innerHTML = `<div class="form-success">

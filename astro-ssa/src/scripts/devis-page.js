@@ -64,7 +64,7 @@ async function render() {
         <label>${lang === 'en' ? 'Phone' : 'Téléphone'} <input type="tel" name="phone" /></label>
       </div>
       <label class="devis-form__msg">${lang === 'en' ? 'Message' : 'Message'} <textarea name="message" rows="3"></textarea></label>
-      <input type="text" name="company_url" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <input type="text" name="company_url" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;opacity:0;" />
       <button type="submit" class="btn btn-primary btn-lg">${t('request_quote')} (${items.length})</button>
       <p class="devis-form__note">${lang === 'en' ? 'Sent straight to our team.' : 'Envoyé directement à notre équipe.'}</p>
     </form>`;
@@ -128,11 +128,21 @@ document.addEventListener('submit', async (e) => {
   const { subject, body } = buildMessage(fields);
   const mailto = buildMailto(fields);
 
+  // Références détaillées (produit + code + qté) pour le tableau de l'email HTML.
+  const DATA = window.__DATA_CACHE__ || {};
+  const itemsDetailed = window.SSA_devis.getItems().map((it) => {
+    const p = (DATA.products || []).find((x) => x.id === it.id);
+    return { name: p ? p.name_slx : '', code: it.code, qty: it.qty || 1 };
+  });
+
   const btn = form.querySelector('button[type="submit"]');
   const label = btn ? btn.innerHTML : '';
   if (btn) { btn.disabled = true; btn.textContent = lang === 'en' ? 'Sending…' : 'Envoi…'; }
 
-  const res = await sendForm({ subject, body, replyEmail: fields.email, replyName: fields.name, honeypot: fields.company_url, mailto, lang, type: 'devis' });
+  const res = await sendForm({
+    subject, body, replyEmail: fields.email, replyName: fields.name, honeypot: fields.company_url, mailto, lang, type: 'devis',
+    fields: { company: fields.company, phone: fields.phone, message: fields.message, items: JSON.stringify(itemsDetailed) },
+  });
 
   if (res.ok) {
     window.SSA_devis.clearQuote();
