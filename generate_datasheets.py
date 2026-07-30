@@ -118,9 +118,9 @@ LOGO_PATH = ROOT / "assets" / "brand" / "ssa-logo-white.png"
 CONTACT = {
     "company": "SSA — Solutions Solaires Adaptées",
     "website": "ssa.green",
-    "address": "118 rue Anthonin Bonnaud, 84120 Pertuis, FRANCE",
+    "address": "97 Rue Jeanne Mance, 84120 Pertuis, FRANCE",
     "email": "contact@ssa.green",
-    "phone": "04 84 85 60 32",
+    "phone": "04 90 09 72 76",
 }
 
 LABELS = {
