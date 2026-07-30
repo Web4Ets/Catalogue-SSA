@@ -2,6 +2,7 @@
 // retirer, saisir ses coordonnées, et envoyer la demande par email (mailto).
 import './common.js';
 import './devis.js';
+import { sendForm } from './send-form.js';
 
 const t = (k) => window.SSA.t(k);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -63,8 +64,9 @@ async function render() {
         <label>${lang === 'en' ? 'Phone' : 'Téléphone'} <input type="tel" name="phone" /></label>
       </div>
       <label class="devis-form__msg">${lang === 'en' ? 'Message' : 'Message'} <textarea name="message" rows="3"></textarea></label>
+      <input type="text" name="company_url" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
       <button type="submit" class="btn btn-primary btn-lg">${t('request_quote')} (${items.length})</button>
-      <p class="devis-form__note">${lang === 'en' ? 'Opens your email app with the request pre-filled.' : 'Ouvre votre messagerie avec la demande pré-remplie.'}</p>
+      <p class="devis-form__note">${lang === 'en' ? 'Sent straight to our team.' : 'Envoyé directement à notre équipe.'}</p>
     </form>`;
 
   container.innerHTML = `
@@ -77,11 +79,11 @@ async function render() {
     </div>`;
 }
 
-function buildMailto(fields) {
-  const DATA = window.__DATA_CACHE__;
+function buildMessage(fields) {
+  const DATA = window.__DATA_CACHE__ || {};
   const lang = window.SSA.lang;
   const items = window.SSA_devis.getItems();
-  const subj = lang === 'en' ? `Quote request — ${items.length} reference(s)` : `Demande de devis — ${items.length} référence(s)`;
+  const subject = lang === 'en' ? `Quote request — ${items.length} reference(s)` : `Demande de devis — ${items.length} référence(s)`;
   const qtyWord = lang === 'en' ? 'qty' : 'qté';
   const lines = items.map((it) => {
     const p = (DATA.products || []).find((x) => x.id === it.id);
@@ -96,7 +98,11 @@ function buildMailto(fields) {
   ].filter(Boolean).join('\n');
   const msg = fields.message ? `\n\n${fields.message}` : '';
   const body = intro + lines.join('\n') + '\n\n' + coord + msg + (lang === 'en' ? '\n\nThank you.' : '\n\nMerci.');
-  return `mailto:contact@ssa.green?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+  return { subject, body };
+}
+function buildMailto(fields) {
+  const { subject, body } = buildMessage(fields);
+  return `mailto:contact@ssa.green?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 document.addEventListener('click', (e) => {
@@ -113,12 +119,34 @@ document.addEventListener('change', (e) => {
   const q = e.target.closest('.devis-qty');
   if (q) window.SSA_devis.setQty(q.dataset.qtyCode, q.value);
 });
-document.addEventListener('submit', (e) => {
+document.addEventListener('submit', async (e) => {
   if (e.target.id !== 'devis-form') return;
   e.preventDefault();
-  const fd = new FormData(e.target);
-  const fields = Object.fromEntries(fd.entries());
-  location.href = buildMailto(fields);
+  const form = e.target;
+  const lang = window.SSA.lang;
+  const fields = Object.fromEntries(new FormData(form).entries());
+  const { subject, body } = buildMessage(fields);
+  const mailto = buildMailto(fields);
+
+  const btn = form.querySelector('button[type="submit"]');
+  const label = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.textContent = lang === 'en' ? 'Sending…' : 'Envoi…'; }
+
+  const res = await sendForm({ subject, body, replyEmail: fields.email, replyName: fields.name, honeypot: fields.company_url, mailto });
+
+  if (res.ok) {
+    window.SSA_devis.clearQuote();
+    const container = document.getElementById('devis-container');
+    if (container) {
+      container.innerHTML = `<div class="form-success">
+        <strong>${lang === 'en' ? 'Request sent!' : 'Demande envoyée !'}</strong>
+        <p>${lang === 'en' ? 'Thank you, we will prepare your quote and get back to you.' : 'Merci, nous préparons votre devis et revenons vers vous rapidement.'}</p>
+        <p style="margin-top:16px;"><a class="btn btn-primary" href="/catalogue/">${t('catalogue')}</a></p>
+      </div>`;
+    }
+  } else if (btn) {
+    btn.disabled = false; btn.innerHTML = label;
+  }
 });
 window.SSA.loadData().then((d) => { window.__DATA_CACHE__ = d; });
 window.SSA.onLangChange(render);

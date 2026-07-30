@@ -2500,3 +2500,21 @@ body:has(#devis-bar) #compare-bar { bottom: 62px; }
   width: auto; height: auto; background: none; padding: 0; color: var(--color-primary-dark);
 }
 .contact-directions .icon { width: 18px; height: 18px; }
+
+/* Champ honeypot (anti-spam) — invisible pour l'utilisateur, piège à bots */
+.hp-field {
+  position: absolute !important; left: -9999px !important;
+  width: 1px; height: 1px; opacity: 0; pointer-events: none;
+}
+/* Message de confirmation après envoi d'un formulaire */
+.form-success {
+  background: rgba(247,166,0,0.10);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius);
+  padding: 24px 26px;
+}
+.form-success strong {
+  display: block; font-family: var(--font-title); font-weight: 800;
+  font-size: 20px; letter-spacing: -0.01em; color: var(--ssa-black); margin-bottom: 6px;
+}
+.form-success p { margin: 0; color: var(--color-text-soft); }
